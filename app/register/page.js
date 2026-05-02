@@ -1,14 +1,14 @@
 'use client';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 
-export default function RegisterPage() {
+function RegisterPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const defaultTier = searchParams.get('tier') || 'THREE_SUBJECTS';
 
-  const [step, setStep] = useState(1); // Step 1: Student info, Step 2: Parent info
+  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -58,7 +58,6 @@ export default function RegisterPage() {
   const handleSubmit = async () => {
     const err = validateStep2();
     if (err) return setError(err);
-
     setLoading(true);
     try {
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`, form);
@@ -95,34 +94,16 @@ export default function RegisterPage() {
       <main style={{ background: '#070714', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
         <div style={{ textAlign: 'center', maxWidth: '480px' }}>
           <div style={{ fontSize: '64px', marginBottom: '24px' }}>📱</div>
-          <h2 style={{ fontSize: '28px', fontWeight: 900, color: '#fff', marginBottom: '16px' }}>
-            Pendaftaran Berjaya!
-          </h2>
+          <h2 style={{ fontSize: '28px', fontWeight: 900, color: '#fff', marginBottom: '16px' }}>Pendaftaran Berjaya!</h2>
           <p style={{ color: '#94a3b8', fontSize: '16px', lineHeight: 1.7, marginBottom: '24px' }}>
             Zed telah menghantar WhatsApp kepada ibu/bapa anda di <strong style={{ color: '#00d4ff' }}>+60{form.parentWhatsapp}</strong>.
             <br /><br />
             Sila minta ibu/bapa anda membuka link tersebut dan membuat pembayaran untuk mengaktifkan akaun anda.
           </p>
-          <div style={{
-            background: 'rgba(0,212,255,0.08)',
-            border: '1px solid rgba(0,212,255,0.2)',
-            borderRadius: '16px',
-            padding: '20px',
-            marginBottom: '24px'
-          }}>
-            <p style={{ color: '#00d4ff', fontSize: '14px', fontWeight: 600 }}>
-              ⏰ Link sah selama 24 jam sahaja.
-            </p>
+          <div style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', borderRadius: '16px', padding: '20px', marginBottom: '24px' }}>
+            <p style={{ color: '#00d4ff', fontSize: '14px', fontWeight: 600 }}>⏰ Link sah selama 24 jam sahaja.</p>
           </div>
-          <button
-            onClick={() => router.push('/login')}
-            style={{
-              background: 'linear-gradient(135deg, #00d4ff, #7c3aed)',
-              border: 'none', color: '#fff',
-              padding: '14px 40px', borderRadius: '50px',
-              fontSize: '15px', fontWeight: 700, cursor: 'pointer'
-            }}
-          >
+          <button onClick={() => router.push('/login')} style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', border: 'none', color: '#fff', padding: '14px 40px', borderRadius: '50px', fontSize: '15px', fontWeight: 700, cursor: 'pointer' }}>
             Pergi ke Login →
           </button>
         </div>
@@ -132,47 +113,24 @@ export default function RegisterPage() {
 
   return (
     <main style={{ background: '#070714', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', fontFamily: 'Inter, sans-serif' }}>
-
-      {/* Background glow */}
       <div style={{ position: 'fixed', top: '20%', left: '50%', transform: 'translateX(-50%)', width: '600px', height: '400px', background: 'rgba(0,212,255,0.05)', borderRadius: '50%', filter: 'blur(100px)', pointerEvents: 'none' }} />
-
       <div style={{ width: '100%', maxWidth: '480px', position: 'relative', zIndex: 1 }}>
-
-        {/* Logo */}
-        <div
-          onClick={() => router.push('/')}
-          style={{ fontSize: '28px', fontWeight: 900, background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '32px', cursor: 'pointer', display: 'inline-block' }}
-        >
+        <div onClick={() => router.push('/')} style={{ fontSize: '28px', fontWeight: 900, background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '32px', cursor: 'pointer', display: 'inline-block' }}>
           ZED
         </div>
-
-        {/* Card */}
-        <div style={{
-          background: 'rgba(255,255,255,0.03)',
-          border: '1px solid rgba(255,255,255,0.08)',
-          borderRadius: '24px',
-          padding: '40px 32px',
-          backdropFilter: 'blur(12px)'
-        }}>
-
-          {/* Header */}
+        <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '24px', padding: '40px 32px', backdropFilter: 'blur(12px)' }}>
           <h1 style={{ fontSize: '24px', fontWeight: 900, color: '#fff', marginBottom: '8px' }}>
             {step === 1 ? 'Daftar Akaun' : 'Maklumat Ibu/Bapa'}
           </h1>
           <p style={{ fontSize: '14px', color: '#94a3b8', marginBottom: '32px' }}>
             {step === 1 ? 'Langkah 1/2 — Maklumat Pelajar' : 'Langkah 2/2 — Untuk kelulusan & pembayaran'}
           </p>
-
-          {/* Progress bar */}
           <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '4px', height: '4px', marginBottom: '32px' }}>
             <div style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', height: '4px', borderRadius: '4px', width: step === 1 ? '50%' : '100%', transition: 'width 0.3s ease' }} />
           </div>
 
-          {/* STEP 1 — Student Info */}
           {step === 1 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-
-              {/* Tier Selection */}
               <div>
                 <label style={labelStyle}>Plan Langganan</label>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
@@ -180,81 +138,29 @@ export default function RegisterPage() {
                     { value: 'THREE_SUBJECTS', label: '3 Subjek', price: 'RM79.99/bulan' },
                     { value: 'FIVE_SUBJECTS', label: '5 Subjek', price: 'RM99.00/bulan' }
                   ].map(t => (
-                    <div
-                      key={t.value}
-                      onClick={() => setForm({ ...form, tier: t.value })}
-                      style={{
-                        border: `1px solid ${form.tier === t.value ? '#00d4ff' : 'rgba(255,255,255,0.1)'}`,
-                        background: form.tier === t.value ? 'rgba(0,212,255,0.08)' : 'rgba(255,255,255,0.03)',
-                        borderRadius: '12px', padding: '12px',
-                        cursor: 'pointer', textAlign: 'center',
-                        transition: 'all 0.3s ease'
-                      }}
-                    >
+                    <div key={t.value} onClick={() => setForm({ ...form, tier: t.value })} style={{ border: `1px solid ${form.tier === t.value ? '#00d4ff' : 'rgba(255,255,255,0.1)'}`, background: form.tier === t.value ? 'rgba(0,212,255,0.08)' : 'rgba(255,255,255,0.03)', borderRadius: '12px', padding: '12px', cursor: 'pointer', textAlign: 'center', transition: 'all 0.3s ease' }}>
                       <div style={{ fontSize: '13px', fontWeight: 700, color: form.tier === t.value ? '#00d4ff' : '#fff' }}>{t.label}</div>
                       <div style={{ fontSize: '12px', color: '#94a3b8' }}>{t.price}</div>
                     </div>
                   ))}
                 </div>
               </div>
-
-              <div>
-                <label style={labelStyle}>Nama Penuh</label>
-                <input name="studentName" value={form.studentName} onChange={handle} placeholder="Nama anda" style={inputStyle} />
-              </div>
-
-              <div>
-                <label style={labelStyle}>Nombor Mobile</label>
-                <input name="studentMobile" value={form.studentMobile} onChange={handle} placeholder="0123456789" style={inputStyle} />
-              </div>
-
-              <div>
-                <label style={labelStyle}>Emel (Pilihan)</label>
-                <input name="studentEmail" value={form.studentEmail} onChange={handle} placeholder="email@contoh.com" style={inputStyle} />
-              </div>
-
-              <div>
-                <label style={labelStyle}>Umur</label>
-                <input name="studentAge" value={form.studentAge} onChange={handle} placeholder="16" type="number" style={inputStyle} />
-              </div>
-
-              <div>
-                <label style={labelStyle}>Password</label>
-                <input name="studentPassword" value={form.studentPassword} onChange={handle} placeholder="Minimum 6 aksara" type="password" style={inputStyle} />
-              </div>
-
-              <div>
-                <label style={labelStyle}>Sahkan Password</label>
-                <input name="confirmPassword" value={form.confirmPassword} onChange={handle} placeholder="Taip semula password" type="password" style={inputStyle} />
-              </div>
-
-              <div>
-                <label style={labelStyle}>Kod Jemputan (Pilihan)</label>
-                <input name="inviteCode" value={form.inviteCode} onChange={handle} placeholder="Kod dari kawan anda" style={inputStyle} />
-              </div>
-
+              <div><label style={labelStyle}>Nama Penuh</label><input name="studentName" value={form.studentName} onChange={handle} placeholder="Nama anda" style={inputStyle} /></div>
+              <div><label style={labelStyle}>Nombor Mobile</label><input name="studentMobile" value={form.studentMobile} onChange={handle} placeholder="0123456789" style={inputStyle} /></div>
+              <div><label style={labelStyle}>Emel (Pilihan)</label><input name="studentEmail" value={form.studentEmail} onChange={handle} placeholder="email@contoh.com" style={inputStyle} /></div>
+              <div><label style={labelStyle}>Umur</label><input name="studentAge" value={form.studentAge} onChange={handle} placeholder="16" type="number" style={inputStyle} /></div>
+              <div><label style={labelStyle}>Password</label><input name="studentPassword" value={form.studentPassword} onChange={handle} placeholder="Minimum 6 aksara" type="password" style={inputStyle} /></div>
+              <div><label style={labelStyle}>Sahkan Password</label><input name="confirmPassword" value={form.confirmPassword} onChange={handle} placeholder="Taip semula password" type="password" style={inputStyle} /></div>
+              <div><label style={labelStyle}>Kod Jemputan (Pilihan)</label><input name="inviteCode" value={form.inviteCode} onChange={handle} placeholder="Kod dari kawan anda" style={inputStyle} /></div>
             </div>
           )}
 
-          {/* STEP 2 — Parent Info */}
           {step === 2 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-
-              <div style={{
-                background: 'rgba(0,212,255,0.06)',
-                border: '1px solid rgba(0,212,255,0.15)',
-                borderRadius: '12px', padding: '16px'
-              }}>
-                <p style={{ fontSize: '13px', color: '#00d4ff', lineHeight: 1.6 }}>
-                  📱 Zed akan menghantar WhatsApp kepada ibu/bapa anda dengan link pembayaran. Akaun anda akan diaktifkan selepas pembayaran berjaya.
-                </p>
+              <div style={{ background: 'rgba(0,212,255,0.06)', border: '1px solid rgba(0,212,255,0.15)', borderRadius: '12px', padding: '16px' }}>
+                <p style={{ fontSize: '13px', color: '#00d4ff', lineHeight: 1.6 }}>📱 Zed akan menghantar WhatsApp kepada ibu/bapa anda dengan link pembayaran. Akaun anda akan diaktifkan selepas pembayaran berjaya.</p>
               </div>
-
-              <div>
-                <label style={labelStyle}>Nama Ibu/Bapa</label>
-                <input name="parentName" value={form.parentName} onChange={handle} placeholder="Nama ibu atau bapa" style={inputStyle} />
-              </div>
-
+              <div><label style={labelStyle}>Nama Ibu/Bapa</label><input name="parentName" value={form.parentName} onChange={handle} placeholder="Nama ibu atau bapa" style={inputStyle} /></div>
               <div>
                 <label style={labelStyle}>Hubungan</label>
                 <select name="parentRelationship" value={form.parentRelationship} onChange={handle} style={{ ...inputStyle, cursor: 'pointer' }}>
@@ -263,75 +169,46 @@ export default function RegisterPage() {
                   <option value="GUARDIAN">Penjaga</option>
                 </select>
               </div>
-
-              <div>
-                <label style={labelStyle}>Nombor WhatsApp Ibu/Bapa</label>
-                <input name="parentWhatsapp" value={form.parentWhatsapp} onChange={handle} placeholder="0123456789" style={inputStyle} />
-              </div>
-
-              {/* Summary */}
-              <div style={{
-                background: 'rgba(124,58,237,0.06)',
-                border: '1px solid rgba(124,58,237,0.15)',
-                borderRadius: '12px', padding: '16px'
-              }}>
+              <div><label style={labelStyle}>Nombor WhatsApp Ibu/Bapa</label><input name="parentWhatsapp" value={form.parentWhatsapp} onChange={handle} placeholder="0123456789" style={inputStyle} /></div>
+              <div style={{ background: 'rgba(124,58,237,0.06)', border: '1px solid rgba(124,58,237,0.15)', borderRadius: '12px', padding: '16px' }}>
                 <div style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '8px', fontWeight: 700 }}>Ringkasan Pendaftaran:</div>
                 <div style={{ fontSize: '13px', color: '#fff' }}>Nama: {form.studentName}</div>
                 <div style={{ fontSize: '13px', color: '#fff' }}>Plan: {form.tier === 'THREE_SUBJECTS' ? '3 Subjek — RM79.99/bulan' : '5 Subjek — RM99.00/bulan'}</div>
               </div>
-
             </div>
           )}
 
-          {/* Error */}
           {error && (
             <div style={{ background: 'rgba(255,45,120,0.1)', border: '1px solid rgba(255,45,120,0.3)', borderRadius: '12px', padding: '12px 16px', marginTop: '20px' }}>
               <p style={{ color: '#ff2d78', fontSize: '13px' }}>{error}</p>
             </div>
           )}
 
-          {/* Buttons */}
           <div style={{ marginTop: '32px', display: 'flex', gap: '12px' }}>
             {step === 2 && (
-              <button
-                onClick={() => setStep(1)}
-                style={{
-                  flex: 1, background: 'transparent',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  color: '#94a3b8', padding: '14px',
-                  borderRadius: '12px', fontSize: '15px',
-                  fontWeight: 600, cursor: 'pointer'
-                }}
-              >
+              <button onClick={() => setStep(1)} style={{ flex: 1, background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', color: '#94a3b8', padding: '14px', borderRadius: '12px', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>
                 ← Kembali
               </button>
             )}
-            <button
-              onClick={step === 1 ? handleNext : handleSubmit}
-              disabled={loading}
-              style={{
-                flex: 1,
-                background: loading ? 'rgba(0,212,255,0.3)' : 'linear-gradient(135deg, #00d4ff, #7c3aed)',
-                border: 'none', color: '#fff', padding: '14px',
-                borderRadius: '12px', fontSize: '15px',
-                fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer',
-                boxShadow: '0 0 20px rgba(0,212,255,0.3)'
-              }}
-            >
+            <button onClick={step === 1 ? handleNext : handleSubmit} disabled={loading} style={{ flex: 1, background: loading ? 'rgba(0,212,255,0.3)' : 'linear-gradient(135deg, #00d4ff, #7c3aed)', border: 'none', color: '#fff', padding: '14px', borderRadius: '12px', fontSize: '15px', fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', boxShadow: '0 0 20px rgba(0,212,255,0.3)' }}>
               {loading ? 'Menghantar...' : step === 1 ? 'Seterusnya →' : 'Hantar & Minta Kelulusan'}
             </button>
           </div>
 
-          {/* Login link */}
           <p style={{ textAlign: 'center', marginTop: '24px', fontSize: '14px', color: '#94a3b8' }}>
             Sudah ada akaun?{' '}
-            <span onClick={() => router.push('/login')} style={{ color: '#00d4ff', cursor: 'pointer', fontWeight: 600 }}>
-              Login di sini
-            </span>
+            <span onClick={() => router.push('/login')} style={{ color: '#00d4ff', cursor: 'pointer', fontWeight: 600 }}>Login di sini</span>
           </p>
-
         </div>
       </div>
     </main>
+  );
+}
+
+export default function RegisterPageWrapper() {
+  return (
+    <Suspense fallback={<div style={{ background: '#070714', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#00d4ff' }}>Loading...</div>}>
+      <RegisterPage />
+    </Suspense>
   );
 }

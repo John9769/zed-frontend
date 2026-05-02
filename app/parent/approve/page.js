@@ -1,9 +1,9 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 
-export default function ParentApprovePage() {
+function ParentApprovePage() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
   const tier = searchParams.get('tier') || 'THREE_SUBJECTS';
@@ -12,7 +12,7 @@ export default function ParentApprovePage() {
   const [error, setError] = useState('');
   const [studentName, setStudentName] = useState('');
   const [paymentUrl, setPaymentUrl] = useState('');
-  const [step, setStep] = useState('info'); // info → paying → done
+  const [step, setStep] = useState('info');
 
   const tierLabel = tier === 'FIVE_SUBJECTS' ? '5 Subjek' : '3 Subjek Teras';
   const tierPrice = tier === 'FIVE_SUBJECTS' ? 'RM99.00' : 'RM79.99';
@@ -43,33 +43,19 @@ export default function ParentApprovePage() {
 
   return (
     <main style={{ background: '#070714', minHeight: '100vh', color: '#fff', fontFamily: 'Inter, sans-serif', padding: '32px 24px' }}>
-
-      {/* Background */}
       <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'radial-gradient(ellipse at top, #0d0d2b 0%, #070714 60%)', zIndex: 0 }} />
-
       <div style={{ maxWidth: '560px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-
-        {/* Logo */}
         <div style={{ fontSize: '28px', fontWeight: 900, background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '32px', textAlign: 'center' }}>
           ZED
         </div>
-
-        {/* Zed intro */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <img
-            src="/assets/Zed.png"
-            alt="Zed"
-            style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover', border: '3px solid rgba(0,212,255,0.4)', marginBottom: '16px', boxShadow: '0 0 30px rgba(0,212,255,0.2)' }}
-          />
-          <h1 style={{ fontSize: '22px', fontWeight: 900, marginBottom: '8px' }}>
-            Salam, Ibu/Bapa! 👋
-          </h1>
+          <img src="/assets/Zed.png" alt="Zed" style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover', border: '3px solid rgba(0,212,255,0.4)', marginBottom: '16px', boxShadow: '0 0 30px rgba(0,212,255,0.2)' }} />
+          <h1 style={{ fontSize: '22px', fontWeight: 900, marginBottom: '8px' }}>Salam, Ibu/Bapa! 👋</h1>
           <p style={{ fontSize: '15px', color: '#94a3b8', lineHeight: 1.7 }}>
             Anak anda telah mendaftar untuk <strong style={{ color: '#00d4ff' }}>ZED</strong> — AI Study BFF pertama Malaysia untuk pelajar SPM.
           </p>
         </div>
 
-        {/* What is Zed */}
         <div style={cardStyle}>
           <h3 style={{ fontSize: '16px', fontWeight: 800, marginBottom: '16px', color: '#00d4ff' }}>🧠 Apa itu ZED?</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -88,7 +74,6 @@ export default function ParentApprovePage() {
           </div>
         </div>
 
-        {/* Price comparison */}
         <div style={cardStyle}>
           <h3 style={{ fontSize: '16px', fontWeight: 800, marginBottom: '16px', color: '#00d4ff' }}>💰 Perbandingan Harga</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
@@ -105,7 +90,6 @@ export default function ParentApprovePage() {
           </div>
         </div>
 
-        {/* Zed Fund */}
         <div style={{ ...cardStyle, background: 'rgba(124,58,237,0.06)', border: '1px solid rgba(124,58,237,0.2)' }}>
           <h3 style={{ fontSize: '16px', fontWeight: 800, marginBottom: '12px', color: '#7c3aed' }}>🎓 Zed Fund — Tiada Tandingan</h3>
           <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: 1.7 }}>
@@ -113,40 +97,31 @@ export default function ParentApprovePage() {
           </p>
         </div>
 
-        {/* Payment box */}
         <div style={{ background: 'rgba(0,212,255,0.06)', border: '1px solid rgba(0,212,255,0.2)', borderRadius: '20px', padding: '28px', textAlign: 'center' }}>
           <div style={{ fontSize: '14px', color: '#94a3b8', marginBottom: '8px' }}>Plan dipilih oleh anak anda</div>
           <div style={{ fontSize: '32px', fontWeight: 900, color: '#fff', marginBottom: '4px' }}>{tierPrice}</div>
           <div style={{ fontSize: '14px', color: '#00d4ff', marginBottom: '24px', fontWeight: 600 }}>{tierLabel} • Harga Pengasas</div>
-
           {error && (
             <div style={{ background: 'rgba(255,45,120,0.1)', border: '1px solid rgba(255,45,120,0.3)', borderRadius: '12px', padding: '12px', marginBottom: '16px' }}>
               <p style={{ color: '#ff2d78', fontSize: '13px' }}>{error}</p>
             </div>
           )}
-
-          <button
-            onClick={handlePay}
-            disabled={loading}
-            style={{
-              width: '100%',
-              background: loading ? 'rgba(0,212,255,0.3)' : 'linear-gradient(135deg, #00d4ff, #7c3aed)',
-              border: 'none', color: '#fff',
-              padding: '16px', borderRadius: '12px',
-              fontSize: '16px', fontWeight: 700,
-              cursor: loading ? 'not-allowed' : 'pointer',
-              boxShadow: '0 0 20px rgba(0,212,255,0.3)'
-            }}
-          >
+          <button onClick={handlePay} disabled={loading} style={{ width: '100%', background: loading ? 'rgba(0,212,255,0.3)' : 'linear-gradient(135deg, #00d4ff, #7c3aed)', border: 'none', color: '#fff', padding: '16px', borderRadius: '12px', fontSize: '16px', fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', boxShadow: '0 0 20px rgba(0,212,255,0.3)' }}>
             {loading ? 'Memproses...' : `Aktifkan Akaun Anak Saya — ${tierPrice} →`}
           </button>
-
           <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '16px', lineHeight: 1.6 }}>
             🔒 Pembayaran selamat melalui Billplz. Akaun anak anda akan diaktifkan serta-merta selepas pembayaran berjaya.
           </p>
         </div>
-
       </div>
     </main>
+  );
+}
+
+export default function ParentApprovePageWrapper() {
+  return (
+    <Suspense fallback={<div style={{ background: '#070714', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#00d4ff' }}>Loading...</div>}>
+      <ParentApprovePage />
+    </Suspense>
   );
 }
