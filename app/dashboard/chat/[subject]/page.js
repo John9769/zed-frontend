@@ -11,9 +11,12 @@ export default function ZedChat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [sessionId, setSessionId] = useState(null);
   const [milestone, setMilestone] = useState(null);
+  const [uploadPreview, setUploadPreview] = useState(null);
   const messagesEndRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   const subjectLabels = {
     BM: 'Bahasa Melayu',
@@ -39,11 +42,9 @@ export default function ZedChat() {
     if (!stored || !t) { router.push('/login'); return; }
     setStudent(JSON.parse(stored));
     setToken(t);
-
-    // Welcome message from Zed
     setMessages([{
       role: 'ZED',
-      content: `Hai! Jom kita tackle ${subjectLabels[subject]} hari ni. 💪 Apa yang anda nak belajar atau tanya? Boleh tanya apa-apa je — Zed sedia!`,
+      content: `Hai! Jom kita tackle ${subjectLabels[subject]} hari ni. 💪 Apa yang anda nak belajar atau tanya? Boleh upload soalan atau gambar exercise book anda juga! Zed sedia! 📎`,
       timestamp: new Date()
     }]);
   }, []);
@@ -52,23 +53,100 @@ export default function ZedChat() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const sendMessage = async () => {
-    if (!input.trim() || loading) return;
+  // ============================================================
+  // HANDLE FILE UPLOAD
+  // ============================================================
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-    const userMessage = input.trim();
-    setInput('');
-    setMessages(prev => [...prev, { role: 'STUDENT', content: userMessage, timestamp: new Date() }]);
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'application/pdf'];
+    if (!allowedTypes.includes(file.type)) {
+      alert('Hanya fail JPG, PNG, WEBP atau PDF dibenarkan.');
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      alert('Fail terlalu besar. Maksimum 10MB.');
+      return;
+    }
+
+    setUploading(true);
+
+    // Show preview
+    if (file.type !== 'application/pdf') {
+      const reader = new FileReader();
+      reader.onload = (e) => setUploadPreview({ type: 'image', url: e.target.result, name: file.name });
+      reader.readAsDataURL(file);
+    } else {
+      setUploadPreview({ type: 'pdf', name: file.name });
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/upload/document`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+
+      const { extractedText, fileName, fileType, url } = res.data;
+
+      // Add upload message to chat
+      setMessages(prev => [...prev, {
+        role: 'STUDENT',
+        content: `[Upload: ${fileName}]`,
+        fileUrl: url,
+        fileType,
+        timestamp: new Date()
+      }]);
+
+      // Auto send to Zed with extracted text
+      const autoMessage = extractedText
+        ? `Saya upload dokumen ini untuk Zed semak. Ini kandungannya:\n\n${extractedText.substring(0, 2000)}`
+        : `Saya upload fail: ${fileName}. Tolong Zed tengok dan bantu saya.`;
+
+      await sendToZed(autoMessage);
+
+    } catch (err) {
+      console.error('Upload error:', err);
+      setMessages(prev => [...prev, {
+        role: 'ZED',
+        content: 'Alamak, ada masalah dengan upload tu. Cuba lagi ye! 🙏',
+        timestamp: new Date()
+      }]);
+      setUploadPreview(null);
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  // ============================================================
+  // SEND TO ZED — CORE FUNCTION
+  // ============================================================
+  const sendToZed = async (messageToSend) => {
     setLoading(true);
-
     try {
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/zed/chat`,
-        { sessionId, message: userMessage, subject },
+        { sessionId, message: messageToSend, subject },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       setSessionId(res.data.sessionId);
-      setMessages(prev => [...prev, { role: 'ZED', content: res.data.reply, timestamp: new Date() }]);
+      setMessages(prev => [...prev, {
+        role: 'ZED',
+        content: res.data.reply,
+        timestamp: new Date()
+      }]);
 
       if (res.data.milestones?.length > 0) {
         setMilestone(res.data.milestones[0]);
@@ -86,6 +164,22 @@ export default function ZedChat() {
     }
   };
 
+  // ============================================================
+  // SEND MESSAGE
+  // ============================================================
+  const sendMessage = async () => {
+    if (!input.trim() || loading) return;
+    const userMessage = input.trim();
+    setInput('');
+    setUploadPreview(null);
+    setMessages(prev => [...prev, {
+      role: 'STUDENT',
+      content: userMessage,
+      timestamp: new Date()
+    }]);
+    await sendToZed(userMessage);
+  };
+
   return (
     <main style={{ background: '#070714', height: '100vh', display: 'flex', flexDirection: 'column', fontFamily: 'Inter, sans-serif', color: '#fff' }}>
 
@@ -98,23 +192,14 @@ export default function ZedChat() {
         backdropFilter: 'blur(12px)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button
-            onClick={() => router.push('/dashboard')}
-            style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '20px', padding: '4px' }}
-          >
-            ←
-          </button>
+          <button onClick={() => router.push('/dashboard')} style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '20px', padding: '4px' }}>←</button>
           <img src="/assets/Zed.png" alt="Zed" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', border: `2px solid ${color}50` }} />
           <div>
             <div style={{ fontSize: '15px', fontWeight: 800 }}>ZED</div>
-            <div style={{ fontSize: '11px', color: color }}>
-              {subjectLabels[subject]} • Online
-            </div>
+            <div style={{ fontSize: '11px', color: color }}>{subjectLabels[subject]} • Online</div>
           </div>
         </div>
-        <div style={{ fontSize: '12px', color: '#94a3b8' }}>
-          {student?.name}
-        </div>
+        <div style={{ fontSize: '12px', color: '#94a3b8' }}>{student?.name}</div>
       </div>
 
       {/* Milestone Toast */}
@@ -124,8 +209,7 @@ export default function ZedChat() {
           background: 'linear-gradient(135deg, #00d4ff, #7c3aed)',
           borderRadius: '50px', padding: '12px 24px',
           fontSize: '14px', fontWeight: 700, color: '#fff',
-          zIndex: 1000, boxShadow: '0 0 30px rgba(0,212,255,0.4)',
-          animation: 'fadeIn 0.3s ease'
+          zIndex: 1000, boxShadow: '0 0 30px rgba(0,212,255,0.4)'
         }}>
           🏆 {milestone}
         </div>
@@ -140,28 +224,30 @@ export default function ZedChat() {
             alignItems: 'flex-end',
             gap: '10px'
           }}>
-            {/* Avatar */}
             {msg.role === 'ZED' && (
               <img src="/assets/Zed.png" alt="Zed" style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${color}40`, flexShrink: 0 }} />
             )}
-
-            {/* Bubble */}
             <div style={{
               maxWidth: '70%',
-              background: msg.role === 'STUDENT'
-                ? 'linear-gradient(135deg, #00d4ff20, #7c3aed20)'
-                : 'rgba(255,255,255,0.05)',
-              border: msg.role === 'STUDENT'
-                ? `1px solid ${color}30`
-                : '1px solid rgba(255,255,255,0.08)',
-              borderRadius: msg.role === 'STUDENT'
-                ? '20px 20px 4px 20px'
-                : '20px 20px 20px 4px',
+              background: msg.role === 'STUDENT' ? 'linear-gradient(135deg, #00d4ff20, #7c3aed20)' : 'rgba(255,255,255,0.05)',
+              border: msg.role === 'STUDENT' ? `1px solid ${color}30` : '1px solid rgba(255,255,255,0.08)',
+              borderRadius: msg.role === 'STUDENT' ? '20px 20px 4px 20px' : '20px 20px 20px 4px',
               padding: '14px 18px'
             }}>
-              <p style={{ fontSize: '14px', lineHeight: 1.7, color: '#fff', margin: 0, whiteSpace: 'pre-wrap' }}>
-                {msg.content}
-              </p>
+              {/* File preview in message */}
+              {msg.fileUrl && msg.fileType === 'image' && (
+                <img src={msg.fileUrl} alt="upload" style={{ width: '100%', maxWidth: '300px', borderRadius: '8px', marginBottom: '8px' }} />
+              )}
+              {msg.fileUrl && msg.fileType === 'pdf' && (
+                <div style={{ background: 'rgba(255,45,120,0.1)', border: '1px solid rgba(255,45,120,0.2)', borderRadius: '8px', padding: '10px 14px', marginBottom: '8px', fontSize: '13px', color: '#ff2d78' }}>
+                  📄 {msg.content.replace('[Upload: ', '').replace(']', '')}
+                </div>
+              )}
+              {!msg.fileUrl && (
+                <p style={{ fontSize: '14px', lineHeight: 1.7, color: '#fff', margin: 0, whiteSpace: 'pre-wrap' }}>
+                  {msg.content}
+                </p>
+              )}
               <div style={{ fontSize: '10px', color: '#94a3b8', marginTop: '6px', textAlign: msg.role === 'STUDENT' ? 'right' : 'left' }}>
                 {msg.timestamp?.toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit' })}
               </div>
@@ -169,11 +255,14 @@ export default function ZedChat() {
           </div>
         ))}
 
-        {/* Typing indicator */}
-        {loading && (
+        {/* Typing / uploading indicator */}
+        {(loading || uploading) && (
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: '10px' }}>
             <img src="/assets/Zed.png" alt="Zed" style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${color}40` }} />
             <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '20px 20px 20px 4px', padding: '14px 18px' }}>
+              <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '6px' }}>
+                {uploading ? 'Zed sedang baca dokumen anda...' : 'Zed sedang berfikir...'}
+              </div>
               <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
                 {[0, 1, 2].map(i => (
                   <div key={i} style={{
@@ -190,6 +279,28 @@ export default function ZedChat() {
         <div ref={messagesEndRef} />
       </div>
 
+      {/* Upload Preview */}
+      {uploadPreview && (
+        <div style={{
+          padding: '8px 24px',
+          background: 'rgba(7,7,20,0.95)',
+          borderTop: `1px solid ${color}10`
+        }}>
+          <div style={{ maxWidth: '800px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {uploadPreview.type === 'image' ? (
+              <img src={uploadPreview.url} alt="preview" style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '8px', border: `1px solid ${color}30` }} />
+            ) : (
+              <div style={{ width: '48px', height: '48px', background: 'rgba(255,45,120,0.1)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>📄</div>
+            )}
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: '12px', color: '#fff', fontWeight: 600 }}>{uploadPreview.name}</div>
+              <div style={{ fontSize: '11px', color: '#00d4ff' }}>Zed sedang membaca...</div>
+            </div>
+            <button onClick={() => setUploadPreview(null)} style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '18px' }}>×</button>
+          </div>
+        </div>
+      )}
+
       {/* Input */}
       <div style={{
         padding: '16px 24px',
@@ -198,6 +309,35 @@ export default function ZedChat() {
         backdropFilter: 'blur(12px)'
       }}>
         <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-end', maxWidth: '800px', margin: '0 auto' }}>
+
+          {/* Upload Button */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/jpg,image/png,image/webp,application/pdf"
+            onChange={handleFileUpload}
+            style={{ display: 'none' }}
+          />
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading || loading}
+            style={{
+              background: uploading ? 'rgba(0,212,255,0.1)' : 'rgba(255,255,255,0.05)',
+              border: `1px solid ${color}30`,
+              color: uploading ? '#00d4ff' : '#94a3b8',
+              width: '48px', height: '48px',
+              borderRadius: '14px',
+              fontSize: '20px',
+              cursor: uploading || loading ? 'not-allowed' : 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0,
+              transition: 'all 0.3s ease'
+            }}
+            title="Upload soalan atau dokumen"
+          >
+            📎
+          </button>
+
           <textarea
             value={input}
             onChange={e => setInput(e.target.value)}
@@ -207,7 +347,7 @@ export default function ZedChat() {
                 sendMessage();
               }
             }}
-            placeholder={`Tanya Zed tentang ${subjectLabels[subject]}...`}
+            placeholder={`Tanya Zed tentang ${subjectLabels[subject]} atau upload soalan anda...`}
             rows={1}
             style={{
               flex: 1,
@@ -223,15 +363,17 @@ export default function ZedChat() {
               lineHeight: 1.5
             }}
           />
+
           <button
             onClick={sendMessage}
-            disabled={loading || !input.trim()}
+            disabled={loading || uploading || !input.trim()}
             style={{
-              background: loading || !input.trim() ? 'rgba(0,212,255,0.2)' : `linear-gradient(135deg, ${color}, #7c3aed)`,
+              background: loading || uploading || !input.trim() ? 'rgba(0,212,255,0.2)' : `linear-gradient(135deg, ${color}, #7c3aed)`,
               border: 'none', color: '#fff',
               width: '48px', height: '48px',
               borderRadius: '14px',
-              fontSize: '20px', cursor: loading || !input.trim() ? 'not-allowed' : 'pointer',
+              fontSize: '20px',
+              cursor: loading || uploading || !input.trim() ? 'not-allowed' : 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               flexShrink: 0,
               boxShadow: loading ? 'none' : `0 0 16px ${color}40`
@@ -241,7 +383,7 @@ export default function ZedChat() {
           </button>
         </div>
         <p style={{ textAlign: 'center', fontSize: '11px', color: '#94a3b8', marginTop: '8px' }}>
-          Enter untuk hantar • Shift+Enter untuk baris baru
+          📎 Upload soalan • Enter untuk hantar • Shift+Enter untuk baris baru
         </p>
       </div>
 
