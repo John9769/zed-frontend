@@ -15,6 +15,8 @@ export default function ZedChat() {
   const [sessionId, setSessionId] = useState(null);
   const [milestone, setMilestone] = useState(null);
   const [uploadPreview, setUploadPreview] = useState(null);
+  const [trialExhausted, setTrialExhausted] = useState(false);
+  const [trialMessages, setTrialMessages] = useState(0);
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
 
@@ -40,7 +42,9 @@ export default function ZedChat() {
     const stored = localStorage.getItem('zed_student');
     const t = localStorage.getItem('zed_token');
     if (!stored || !t) { router.push('/login'); return; }
-    setStudent(JSON.parse(stored));
+    const parsed = JSON.parse(stored);
+    setStudent(parsed);
+    setTrialMessages(parsed.trialMessages || 0);
     setToken(t);
     setMessages([{
       role: 'ZED',
@@ -154,11 +158,15 @@ export default function ZedChat() {
       }
 
     } catch (err) {
-      setMessages(prev => [...prev, {
-        role: 'ZED',
-        content: 'Alamak, Zed ada masalah teknikal sekejap. Cuba lagi ye! 🙏',
-        timestamp: new Date()
-      }]);
+      if (err.response?.data?.error === 'TRIAL_EXHAUSTED') {
+        setTrialExhausted(true);
+      } else {
+        setMessages(prev => [...prev, {
+          role: 'ZED',
+          content: 'Alamak, Zed ada masalah teknikal sekejap. Cuba lagi ye! 🙏',
+          timestamp: new Date()
+        }]);
+      }
     } finally {
       setLoading(false);
     }
@@ -199,8 +207,36 @@ export default function ZedChat() {
             <div style={{ fontSize: '11px', color: color }}>{subjectLabels[subject]} • Online</div>
           </div>
         </div>
-        <div style={{ fontSize: '12px', color: '#94a3b8' }}>{student?.name}</div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
+          <div style={{ fontSize: '12px', color: '#94a3b8' }}>{student?.name}</div>
+          {student?.status === 'TRIAL' && !trialExhausted && (
+            <div style={{ fontSize: '11px', color: '#f59e0b', fontWeight: 600 }}>
+              🎯 Cuba percuma: {5 - trialMessages} lagi
+            </div>
+          )}
+        </div>
       </div>
+
+      {/* Trial Exhausted Banner */}
+      {trialExhausted && (
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(0,212,255,0.15), rgba(124,58,237,0.15))',
+          border: '1px solid rgba(0,212,255,0.3)',
+          padding: '20px 24px',
+          textAlign: 'center'
+        }}>
+          <div style={{ fontSize: '20px', marginBottom: '8px' }}>🚀</div>
+          <div style={{ fontSize: '15px', fontWeight: 800, color: '#fff', marginBottom: '6px' }}>
+            Cuba percuma anda dah habis!
+          </div>
+          <div style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '16px' }}>
+            Zed dah tunjukkan cara dia mengajar. Sekarang minta ibu/bapa subscribe untuk teruskan perjalanan SPM anda!
+          </div>
+          <div style={{ fontSize: '12px', color: '#00d4ff' }}>
+            💬 Ibu/bapa anda akan menerima WhatsApp dari Zed sebentar lagi.
+          </div>
+        </div>
+      )}
 
       {/* Milestone Toast */}
       {milestone && (

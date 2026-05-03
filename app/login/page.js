@@ -132,6 +132,14 @@ export default function LoginPage() {
             </div>
           )}
 
+          {error?.includes('expired') && (
+            <div style={{ background: 'rgba(255,159,0,0.08)', border: '1px solid rgba(255,159,0,0.2)', borderRadius: '12px', padding: '12px 16px', marginTop: '12px' }}>
+              <p style={{ color: '#ff9f00', fontSize: '13px' }}>
+                💡 Langganan anda telah tamat. Sila hubungi ibu/bapa untuk memperbaharui.
+              </p>
+            </div>
+          )}
+
           <button
             onClick={handleLogin}
             disabled={loading}
