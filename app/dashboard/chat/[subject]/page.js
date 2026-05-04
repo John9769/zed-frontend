@@ -173,6 +173,23 @@ export default function ZedChat() {
   };
 
   // ============================================================
+  // REQUEST PARENT APPROVAL
+  // ============================================================
+  const requestApproval = async () => {
+    try {
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/request-approval`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      alert('WhatsApp telah dihantar kepada ibu/bapa anda! Sila tunggu kelulusan mereka. 🙏');
+      router.push('/dashboard');
+    } catch (err) {
+      alert('Gagal hantar WhatsApp. Sila cuba lagi.');
+    }
+  };
+
+  // ============================================================
   // SEND MESSAGE
   // ============================================================
   const sendMessage = async () => {
@@ -232,9 +249,20 @@ export default function ZedChat() {
           <div style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '16px' }}>
             Zed dah tunjukkan cara dia mengajar. Sekarang minta ibu/bapa subscribe untuk teruskan perjalanan SPM anda!
           </div>
-          <div style={{ fontSize: '12px', color: '#00d4ff' }}>
-            💬 Ibu/bapa anda akan menerima WhatsApp dari Zed sebentar lagi.
-          </div>
+          <button
+            onClick={requestApproval}
+            style={{
+              background: 'linear-gradient(135deg, #00d4ff, #7c3aed)',
+              border: 'none', color: '#fff',
+              padding: '12px 32px',
+              borderRadius: '50px',
+              fontSize: '14px', fontWeight: 700,
+              cursor: 'pointer',
+              boxShadow: '0 0 20px rgba(0,212,255,0.4)'
+            }}
+          >
+            📲 Dapatkan Kelulusan Ibu Bapa
+          </button>
         </div>
       )}
 
