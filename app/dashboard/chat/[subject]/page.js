@@ -157,6 +157,16 @@ export default function ZedChat() {
         setTimeout(() => setMilestone(null), 5000);
       }
 
+      if (res.data.trialMessages !== undefined) {
+        setTrialMessages(res.data.trialMessages);
+        const stored = localStorage.getItem('zed_student');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          parsed.trialMessages = res.data.trialMessages;
+          localStorage.setItem('zed_student', JSON.stringify(parsed));
+        }
+      }
+
     } catch (err) {
       if (err.response?.data?.error === 'TRIAL_EXHAUSTED') {
         setTrialExhausted(true);

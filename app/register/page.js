@@ -93,18 +93,18 @@ function RegisterPage() {
     return (
       <main style={{ background: '#070714', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
         <div style={{ textAlign: 'center', maxWidth: '480px' }}>
-          <div style={{ fontSize: '64px', marginBottom: '24px' }}>📱</div>
+          <div style={{ fontSize: '64px', marginBottom: '24px' }}>🎉</div>
           <h2 style={{ fontSize: '28px', fontWeight: 900, color: '#fff', marginBottom: '16px' }}>Pendaftaran Berjaya!</h2>
           <p style={{ color: '#94a3b8', fontSize: '16px', lineHeight: 1.7, marginBottom: '24px' }}>
-            Zed telah menghantar WhatsApp kepada ibu/bapa anda di <strong style={{ color: '#00d4ff' }}>+60{form.parentWhatsapp}</strong>.
+            Akaun anda telah berjaya didaftarkan! Cuba Zed secara percuma dengan <strong style={{ color: '#00d4ff' }}>5 mesej percuma</strong>.
             <br /><br />
-            Sila minta ibu/bapa anda membuka link tersebut dan membuat pembayaran untuk mengaktifkan akaun anda.
+            Selepas 5 mesej, anda boleh minta kelulusan ibu/bapa untuk teruskan pembelajaran.
           </p>
           <div style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', borderRadius: '16px', padding: '20px', marginBottom: '24px' }}>
-            <p style={{ color: '#00d4ff', fontSize: '14px', fontWeight: 600 }}>⏰ Link sah selama 24 jam sahaja.</p>
+            <p style={{ color: '#00d4ff', fontSize: '14px', fontWeight: 600 }}>🎯 5 mesej percuma menanti anda!</p>
           </div>
           <button onClick={() => router.push('/login')} style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', border: 'none', color: '#fff', padding: '14px 40px', borderRadius: '50px', fontSize: '15px', fontWeight: 700, cursor: 'pointer' }}>
-            Pergi ke Login →
+            Mula Cuba Zed →
           </button>
         </div>
       </main>
@@ -123,7 +123,7 @@ function RegisterPage() {
             {step === 1 ? 'Daftar Akaun' : 'Maklumat Ibu/Bapa'}
           </h1>
           <p style={{ fontSize: '14px', color: '#94a3b8', marginBottom: '32px' }}>
-            {step === 1 ? 'Langkah 1/2 — Maklumat Pelajar' : 'Langkah 2/2 — Untuk kelulusan & pembayaran'}
+            {step === 1 ? 'Langkah 1/2 — Maklumat Pelajar' : 'Langkah 2/2 — Untuk proses kelulusan kelak'}
           </p>
           <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '4px', height: '4px', marginBottom: '32px' }}>
             <div style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', height: '4px', borderRadius: '4px', width: step === 1 ? '50%' : '100%', transition: 'width 0.3s ease' }} />
@@ -158,7 +158,7 @@ function RegisterPage() {
           {step === 2 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div style={{ background: 'rgba(0,212,255,0.06)', border: '1px solid rgba(0,212,255,0.15)', borderRadius: '12px', padding: '16px' }}>
-                <p style={{ fontSize: '13px', color: '#00d4ff', lineHeight: 1.6 }}>📱 Zed akan menghantar WhatsApp kepada ibu/bapa anda dengan link pembayaran. Akaun anda akan diaktifkan selepas pembayaran berjaya.</p>
+                <p style={{ fontSize: '13px', color: '#00d4ff', lineHeight: 1.6 }}>📱 Maklumat ibu/bapa diperlukan untuk proses kelulusan selepas anda mencuba Zed secara percuma.</p>
               </div>
               <div><label style={labelStyle}>Nama Ibu/Bapa</label><input name="parentName" value={form.parentName} onChange={handle} placeholder="Nama ibu atau bapa" style={inputStyle} /></div>
               <div>
@@ -191,7 +191,7 @@ function RegisterPage() {
               </button>
             )}
             <button onClick={step === 1 ? handleNext : handleSubmit} disabled={loading} style={{ flex: 1, background: loading ? 'rgba(0,212,255,0.3)' : 'linear-gradient(135deg, #00d4ff, #7c3aed)', border: 'none', color: '#fff', padding: '14px', borderRadius: '12px', fontSize: '15px', fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', boxShadow: '0 0 20px rgba(0,212,255,0.3)' }}>
-              {loading ? 'Menghantar...' : step === 1 ? 'Seterusnya →' : 'Hantar & Minta Kelulusan'}
+              {loading ? 'Mendaftar...' : step === 1 ? 'Seterusnya →' : 'Daftar & Cuba Zed Percuma'}
             </button>
           </div>
 
