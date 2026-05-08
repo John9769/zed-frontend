@@ -3,10 +3,21 @@ import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 
+const SUBJECTS = [
+  { value: 'MATH', label: 'Matematik', icon: '📐', available: true },
+  { value: 'SCIENCE', label: 'Sains', icon: '🔬', available: true },
+  { value: 'SEJARAH', label: 'Sejarah', icon: '📜', available: true },
+  { value: 'BM', label: 'Bahasa Melayu', icon: '✍️', available: true },
+  { value: 'ENGLISH', label: 'English', icon: '🗣️', available: true }
+];
+
+const EARLY_BIRD_PRICE = 19.99;
+const NORMAL_PRICE = 29.99;
+
 function RegisterPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const defaultTier = searchParams.get('tier') || 'THREE_SUBJECTS';
+  const defaultSubject = searchParams.get('subject') || 'MATH';
 
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -24,7 +35,7 @@ function RegisterPage() {
     parentWhatsapp: '',
     parentRelationship: 'FATHER',
     inviteCode: '',
-    tier: defaultTier
+    subject: defaultSubject
   });
 
   const handle = (e) => {
@@ -33,6 +44,7 @@ function RegisterPage() {
   };
 
   const validateStep1 = () => {
+    if (!form.subject) return 'Sila pilih satu subjek.';
     if (!form.studentName) return 'Sila masukkan nama anda.';
     if (!form.studentMobile) return 'Sila masukkan nombor mobile anda.';
     if (form.studentMobile.length < 10) return 'Nombor mobile tidak sah.';
@@ -60,7 +72,18 @@ function RegisterPage() {
     if (err) return setError(err);
     setLoading(true);
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`, form);
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`, {
+        studentName: form.studentName,
+        studentEmail: form.studentEmail,
+        studentMobile: form.studentMobile,
+        studentAge: form.studentAge,
+        studentPassword: form.studentPassword,
+        parentName: form.parentName,
+        parentWhatsapp: form.parentWhatsapp,
+        parentRelationship: form.parentRelationship,
+        inviteCode: form.inviteCode,
+        subject: form.subject
+      });
       setSuccess(true);
     } catch (err) {
       setError(err.response?.data?.error || 'Pendaftaran gagal. Sila cuba lagi.');
@@ -68,6 +91,8 @@ function RegisterPage() {
       setLoading(false);
     }
   };
+
+  const selectedSubject = SUBJECTS.find(s => s.value === form.subject);
 
   const inputStyle = {
     width: '100%',
@@ -102,6 +127,9 @@ function RegisterPage() {
           </p>
           <div style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', borderRadius: '16px', padding: '20px', marginBottom: '24px' }}>
             <p style={{ color: '#00d4ff', fontSize: '14px', fontWeight: 600 }}>🎯 5 mesej percuma menanti anda!</p>
+            <p style={{ color: '#94a3b8', fontSize: '13px', marginTop: '8px' }}>
+              Subjek dipilih: <strong style={{ color: '#fff' }}>{selectedSubject?.icon} {selectedSubject?.label}</strong>
+            </p>
           </div>
           <button onClick={() => router.push('/login')} style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', border: 'none', color: '#fff', padding: '14px 40px', borderRadius: '50px', fontSize: '15px', fontWeight: 700, cursor: 'pointer' }}>
             Mula Cuba Zed →
@@ -118,33 +146,57 @@ function RegisterPage() {
         <div onClick={() => router.push('/')} style={{ fontSize: '28px', fontWeight: 900, background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '32px', cursor: 'pointer', display: 'inline-block' }}>
           ZED
         </div>
+
         <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '24px', padding: '40px 32px', backdropFilter: 'blur(12px)' }}>
           <h1 style={{ fontSize: '24px', fontWeight: 900, color: '#fff', marginBottom: '8px' }}>
             {step === 1 ? 'Daftar Akaun' : 'Maklumat Ibu/Bapa'}
           </h1>
           <p style={{ fontSize: '14px', color: '#94a3b8', marginBottom: '32px' }}>
-            {step === 1 ? 'Langkah 1/2 — Maklumat Pelajar' : 'Langkah 2/2 — Untuk proses kelulusan kelak'}
+            {step === 1 ? 'Langkah 1/2 — Pilih subjek & maklumat pelajar' : 'Langkah 2/2 — Untuk proses kelulusan kelak'}
           </p>
+
+          {/* Progress bar */}
           <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '4px', height: '4px', marginBottom: '32px' }}>
             <div style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', height: '4px', borderRadius: '4px', width: step === 1 ? '50%' : '100%', transition: 'width 0.3s ease' }} />
           </div>
 
           {step === 1 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+
+              {/* Subject Selection */}
               <div>
-                <label style={labelStyle}>Plan Langganan</label>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                  {[
-                    { value: 'THREE_SUBJECTS', label: '3 Subjek', price: 'RM79.99/bulan' },
-                    { value: 'FIVE_SUBJECTS', label: '5 Subjek', price: 'RM99.00/bulan' }
-                  ].map(t => (
-                    <div key={t.value} onClick={() => setForm({ ...form, tier: t.value })} style={{ border: `1px solid ${form.tier === t.value ? '#00d4ff' : 'rgba(255,255,255,0.1)'}`, background: form.tier === t.value ? 'rgba(0,212,255,0.08)' : 'rgba(255,255,255,0.03)', borderRadius: '12px', padding: '12px', cursor: 'pointer', textAlign: 'center', transition: 'all 0.3s ease' }}>
-                      <div style={{ fontSize: '13px', fontWeight: 700, color: form.tier === t.value ? '#00d4ff' : '#fff' }}>{t.label}</div>
-                      <div style={{ fontSize: '12px', color: '#94a3b8' }}>{t.price}</div>
+                <label style={labelStyle}>Pilih 1 Subjek</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                  <span style={{ fontSize: '11px', background: 'rgba(0,212,255,0.15)', color: '#00d4ff', border: '1px solid rgba(0,212,255,0.3)', borderRadius: '20px', padding: '3px 10px', fontWeight: 700 }}>
+                    🎯 Early Bird RM{EARLY_BIRD_PRICE}/bulan
+                  </span>
+                  <span style={{ fontSize: '11px', color: '#475569', textDecoration: 'line-through' }}>RM{NORMAL_PRICE}</span>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  {SUBJECTS.map(s => (
+                    <div
+                      key={s.value}
+                      onClick={() => setForm({ ...form, subject: s.value })}
+                      style={{
+                        border: `1px solid ${form.subject === s.value ? '#00d4ff' : 'rgba(255,255,255,0.1)'}`,
+                        background: form.subject === s.value ? 'rgba(0,212,255,0.08)' : 'rgba(255,255,255,0.03)',
+                        borderRadius: '12px',
+                        padding: '12px',
+                        cursor: 'pointer',
+                        textAlign: 'center',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      <div style={{ fontSize: '20px', marginBottom: '4px' }}>{s.icon}</div>
+                      <div style={{ fontSize: '12px', fontWeight: 700, color: form.subject === s.value ? '#00d4ff' : '#fff' }}>{s.label}</div>
                     </div>
                   ))}
                 </div>
+                <p style={{ fontSize: '11px', color: '#475569', marginTop: '8px' }}>
+                  * Boleh tambah subjek lain kemudian
+                </p>
               </div>
+
               <div><label style={labelStyle}>Nama Penuh</label><input name="studentName" value={form.studentName} onChange={handle} placeholder="Nama anda" style={inputStyle} /></div>
               <div><label style={labelStyle}>Nombor Mobile</label><input name="studentMobile" value={form.studentMobile} onChange={handle} placeholder="0123456789" style={inputStyle} /></div>
               <div><label style={labelStyle}>Emel (Pilihan)</label><input name="studentEmail" value={form.studentEmail} onChange={handle} placeholder="email@contoh.com" style={inputStyle} /></div>
@@ -158,8 +210,11 @@ function RegisterPage() {
           {step === 2 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div style={{ background: 'rgba(0,212,255,0.06)', border: '1px solid rgba(0,212,255,0.15)', borderRadius: '12px', padding: '16px' }}>
-                <p style={{ fontSize: '13px', color: '#00d4ff', lineHeight: 1.6 }}>📱 Maklumat ibu/bapa diperlukan untuk proses kelulusan selepas anda mencuba Zed secara percuma.</p>
+                <p style={{ fontSize: '13px', color: '#00d4ff', lineHeight: 1.6 }}>
+                  📱 Maklumat ibu/bapa diperlukan untuk proses kelulusan selepas anda mencuba Zed secara percuma.
+                </p>
               </div>
+
               <div><label style={labelStyle}>Nama Ibu/Bapa</label><input name="parentName" value={form.parentName} onChange={handle} placeholder="Nama ibu atau bapa" style={inputStyle} /></div>
               <div>
                 <label style={labelStyle}>Hubungan</label>
@@ -170,10 +225,16 @@ function RegisterPage() {
                 </select>
               </div>
               <div><label style={labelStyle}>Nombor WhatsApp Ibu/Bapa</label><input name="parentWhatsapp" value={form.parentWhatsapp} onChange={handle} placeholder="0123456789" style={inputStyle} /></div>
+
+              {/* Summary */}
               <div style={{ background: 'rgba(124,58,237,0.06)', border: '1px solid rgba(124,58,237,0.15)', borderRadius: '12px', padding: '16px' }}>
-                <div style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '8px', fontWeight: 700 }}>Ringkasan Pendaftaran:</div>
-                <div style={{ fontSize: '13px', color: '#fff' }}>Nama: {form.studentName}</div>
-                <div style={{ fontSize: '13px', color: '#fff' }}>Plan: {form.tier === 'THREE_SUBJECTS' ? '3 Subjek — RM79.99/bulan' : '5 Subjek — RM99.00/bulan'}</div>
+                <div style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '10px', fontWeight: 700 }}>Ringkasan Pendaftaran:</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <div style={{ fontSize: '13px', color: '#fff' }}>👤 Nama: <strong>{form.studentName}</strong></div>
+                  <div style={{ fontSize: '13px', color: '#fff' }}>📚 Subjek: <strong style={{ color: '#00d4ff' }}>{selectedSubject?.icon} {selectedSubject?.label}</strong></div>
+                  <div style={{ fontSize: '13px', color: '#fff' }}>💰 Harga: <strong style={{ color: '#10b981' }}>RM{EARLY_BIRD_PRICE}/bulan</strong> <span style={{ color: '#475569', textDecoration: 'line-through', fontSize: '11px' }}>RM{NORMAL_PRICE}</span></div>
+                  <div style={{ fontSize: '11px', color: '#f59e0b', marginTop: '4px' }}>🎯 Harga Early Bird — terhad untuk 10,000 pelajar pertama</div>
+                </div>
               </div>
             </div>
           )}
@@ -191,7 +252,7 @@ function RegisterPage() {
               </button>
             )}
             <button onClick={step === 1 ? handleNext : handleSubmit} disabled={loading} style={{ flex: 1, background: loading ? 'rgba(0,212,255,0.3)' : 'linear-gradient(135deg, #00d4ff, #7c3aed)', border: 'none', color: '#fff', padding: '14px', borderRadius: '12px', fontSize: '15px', fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', boxShadow: '0 0 20px rgba(0,212,255,0.3)' }}>
-              {loading ? 'Mendaftar...' : step === 1 ? 'Seterusnya →' : 'Daftar & Cuba Zed Percuma'}
+              {loading ? 'Mendaftar...' : step === 1 ? 'Seterusnya →' : 'Daftar & Cuba Zed Percuma 🚀'}
             </button>
           </div>
 

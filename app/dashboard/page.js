@@ -2,6 +2,14 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
+const SUBJECT_MAP = {
+  BM: { label: 'Bahasa Melayu', icon: '📖', color: '#00d4ff', desc: 'Komsas, Karangan, Tatabahasa' },
+  ENGLISH: { label: 'English', icon: '🌍', color: '#7c3aed', desc: 'Literature, Essay, Grammar' },
+  MATH: { label: 'Mathematics', icon: '📐', color: '#ff2d78', desc: 'Algebra, Calculus, Statistics' },
+  SCIENCE: { label: 'Science', icon: '🔬', color: '#10b981', desc: 'Biology, Chemistry, Physics' },
+  SEJARAH: { label: 'Sejarah', icon: '🏛️', color: '#f59e0b', desc: 'Kesultanan, Kemerdekaan, Perlembagaan' }
+};
+
 export default function Dashboard() {
   const router = useRouter();
   const [student, setStudent] = useState(null);
@@ -10,10 +18,7 @@ export default function Dashboard() {
   useEffect(() => {
     const stored = localStorage.getItem('zed_student');
     const token = localStorage.getItem('zed_token');
-    if (!stored || !token) {
-      router.push('/login');
-      return;
-    }
+    if (!stored || !token) { router.push('/login'); return; }
     setStudent(JSON.parse(stored));
     setLoading(false);
   }, []);
@@ -24,55 +29,31 @@ export default function Dashboard() {
     router.push('/login');
   };
 
-  const subjects = {
-    BM: { label: 'Bahasa Melayu', icon: '📖', color: '#00d4ff', desc: 'Komsas, Karangan, Tatabahasa' },
-    ENGLISH: { label: 'English', icon: '🌍', color: '#7c3aed', desc: 'Literature, Essay, Grammar' },
-    MATH: { label: 'Mathematics', icon: '📐', color: '#ff2d78', desc: 'Algebra, Calculus, Statistics' },
-    SCIENCE: { label: 'Science', icon: '🔬', color: '#10b981', desc: 'Biology, Chemistry, Physics' },
-    SEJARAH: { label: 'Sejarah', icon: '🏛️', color: '#f59e0b', desc: 'Kesultanan, Kemerdekaan, Perlembagaan' }
-  };
+  const isTrial = student?.status === 'TRIAL';
 
-  if (loading) {
-    return (
-      <main style={{ background: '#070714', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ color: '#00d4ff', fontSize: '16px' }}>Loading...</div>
-      </main>
-    );
-  }
+  if (loading) return (
+    <main style={{ background: '#070714', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ color: '#00d4ff', fontSize: '16px' }}>Loading...</div>
+    </main>
+  );
 
   return (
     <main style={{ background: '#070714', minHeight: '100vh', color: '#fff', fontFamily: 'Inter, sans-serif' }}>
 
-      {/* Background */}
       <div style={{ position: 'fixed', inset: 0, backgroundImage: 'linear-gradient(rgba(0,212,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,0.02) 1px, transparent 1px)', backgroundSize: '50px 50px', pointerEvents: 'none' }} />
 
       {/* Navbar */}
-      <nav style={{
-        position: 'sticky', top: 0, zIndex: 100,
-        padding: '16px 32px',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        background: 'rgba(7,7,20,0.95)',
-        borderBottom: '1px solid rgba(0,212,255,0.1)',
-        backdropFilter: 'blur(12px)'
-      }}>
-        <div style={{ fontSize: '22px', fontWeight: 900, background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          ZED
-        </div>
+      <nav style={{ position: 'sticky', top: 0, zIndex: 100, padding: '16px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(7,7,20,0.95)', borderBottom: '1px solid rgba(0,212,255,0.1)', backdropFilter: 'blur(12px)' }}>
+        <div style={{ fontSize: '22px', fontWeight: 900, background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>ZED</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <img src="/assets/Zed.png" alt="Zed" style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(0,212,255,0.3)' }} />
             <span style={{ fontSize: '14px', color: '#94a3b8' }}>Hi, <strong style={{ color: '#fff' }}>{student?.name}</strong></span>
           </div>
-          <button
-            onClick={() => router.push('/dashboard/credits')}
-            style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', color: '#00d4ff', padding: '6px 14px', borderRadius: '50px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}
-          >
+          <button onClick={() => router.push('/dashboard/credits')} style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', color: '#00d4ff', padding: '6px 14px', borderRadius: '50px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>
             💰 Zed Fund
           </button>
-          <button
-            onClick={logout}
-            style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8', padding: '6px 14px', borderRadius: '50px', fontSize: '12px', cursor: 'pointer' }}
-          >
+          <button onClick={logout} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8', padding: '6px 14px', borderRadius: '50px', fontSize: '12px', cursor: 'pointer' }}>
             Logout
           </button>
         </div>
@@ -85,64 +66,71 @@ export default function Dashboard() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
             <img src="/assets/Zed.png" alt="Zed" style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(0,212,255,0.4)', boxShadow: '0 0 20px rgba(0,212,255,0.2)' }} />
             <div>
-              <h1 style={{ fontSize: '24px', fontWeight: 900, marginBottom: '4px' }}>
-                Hai {student?.name}! 👋
-              </h1>
+              <h1 style={{ fontSize: '24px', fontWeight: 900, marginBottom: '4px' }}>Hai {student?.name}! 👋</h1>
               <p style={{ fontSize: '14px', color: '#94a3b8' }}>
-                Zed dah ready. Nak belajar subjek apa hari ni?
+                {isTrial ? `${5 - (student?.trialMessages || 0)} mesej percuma tinggal — jom cuba!` : 'Zed dah ready. Nak belajar subjek apa hari ni?'}
               </p>
             </div>
           </div>
 
-          {/* First adopter badge */}
-          {student?.isFirstAdopter && (
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', borderRadius: '50px', padding: '6px 16px' }}>
-              <span style={{ fontSize: '12px' }}>⭐</span>
-              <span style={{ fontSize: '12px', color: '#00d4ff', fontWeight: 700 }}>First Adopter — Harga Terkunci</span>
-            </div>
-          )}
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {student?.isFirstAdopter && (
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', borderRadius: '50px', padding: '6px 16px' }}>
+                <span style={{ fontSize: '12px', color: '#00d4ff', fontWeight: 700 }}>⭐ First Adopter — Harga Early Bird Terkunci</span>
+              </div>
+            )}
+            {isTrial && (
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '50px', padding: '6px 16px' }}>
+                <span style={{ fontSize: '12px', color: '#f59e0b', fontWeight: 700 }}>🎯 Akaun Trial — {5 - (student?.trialMessages || 0)} mesej berbaki</span>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Subject Grid */}
+        {/* Trial banner */}
+        {isTrial && (
+          <div style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '16px', padding: '20px 24px', marginBottom: '32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+            <div>
+              <div style={{ fontSize: '15px', fontWeight: 800, color: '#f59e0b', marginBottom: '4px' }}>Cuba semua subjek percuma!</div>
+              <div style={{ fontSize: '13px', color: '#94a3b8' }}>Selepas 5 mesej, pilih 1 subjek pada RM19.99/bulan sahaja.</div>
+            </div>
+            <button onClick={() => router.push('/register')} style={{ background: 'linear-gradient(135deg, #f59e0b, #ef4444)', border: 'none', color: '#fff', padding: '10px 20px', borderRadius: '10px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap' }}>
+              Langgan Sekarang →
+            </button>
+          </div>
+        )}
+
+        {/* Subjects */}
         <div style={{ marginBottom: '48px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '24px', color: '#94a3b8', letterSpacing: '1px', textTransform: 'uppercase', fontSize: '12px' }}>
-            Subjek Anda
-          </h2>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+            <h2 style={{ fontSize: '12px', fontWeight: 800, color: '#94a3b8', letterSpacing: '1px', textTransform: 'uppercase' }}>
+              {isTrial ? 'Cuba Semua Subjek' : 'Subjek Anda'}
+            </h2>
+            {!isTrial && (
+              <button onClick={() => router.push('/dashboard/add-subject')} style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', color: '#00d4ff', padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>
+                + Tambah Subjek
+              </button>
+            )}
+          </div>
+
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
             {student?.subjects?.map((subjectKey) => {
-              const sub = subjects[subjectKey];
+              const sub = SUBJECT_MAP[subjectKey];
               if (!sub) return null;
               return (
                 <div
                   key={subjectKey}
                   onClick={() => router.push(`/dashboard/chat/${subjectKey}`)}
-                  style={{
-                    background: 'rgba(255,255,255,0.03)',
-                    border: `1px solid ${sub.color}20`,
-                    borderRadius: '20px',
-                    padding: '28px 24px',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    position: 'relative',
-                    overflow: 'hidden'
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.border = `1px solid ${sub.color}60`;
-                    e.currentTarget.style.background = `${sub.color}08`;
-                    e.currentTarget.style.transform = 'translateY(-4px)';
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.border = `1px solid ${sub.color}20`;
-                    e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }}
+                  style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${sub.color}20`, borderRadius: '20px', padding: '28px 24px', cursor: 'pointer', transition: 'all 0.3s ease', position: 'relative', overflow: 'hidden' }}
+                  onMouseEnter={e => { e.currentTarget.style.border = `1px solid ${sub.color}60`; e.currentTarget.style.background = `${sub.color}08`; e.currentTarget.style.transform = 'translateY(-4px)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.border = `1px solid ${sub.color}20`; e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; e.currentTarget.style.transform = 'translateY(0)'; }}
                 >
                   <div style={{ fontSize: '36px', marginBottom: '16px' }}>{sub.icon}</div>
                   <h3 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '8px', color: '#fff' }}>{sub.label}</h3>
                   <p style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '20px' }}>{sub.desc}</p>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: sub.color, boxShadow: `0 0 8px ${sub.color}` }} />
-                    <span style={{ fontSize: '12px', color: sub.color, fontWeight: 600 }}>Zed Ready</span>
+                    <span style={{ fontSize: '12px', color: sub.color, fontWeight: 600 }}>{isTrial ? 'Cuba Percuma' : 'Zed Ready'}</span>
                   </div>
                 </div>
               );
@@ -157,18 +145,7 @@ export default function Dashboard() {
             { icon: '📊', label: 'Progress', value: 'Lihat Laporan', action: () => router.push('/dashboard/progress'), color: '#7c3aed' },
             { icon: '🔗', label: 'Referral Code', value: student?.referralCode || '—', action: null, color: '#ff2d78' }
           ].map((item, i) => (
-            <div
-              key={i}
-              onClick={item.action}
-              style={{
-                background: 'rgba(255,255,255,0.03)',
-                border: `1px solid ${item.color}20`,
-                borderRadius: '16px',
-                padding: '20px',
-                cursor: item.action ? 'pointer' : 'default',
-                transition: 'all 0.3s ease'
-              }}
-            >
+            <div key={i} onClick={item.action} style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${item.color}20`, borderRadius: '16px', padding: '20px', cursor: item.action ? 'pointer' : 'default', transition: 'all 0.3s ease' }}>
               <div style={{ fontSize: '24px', marginBottom: '8px' }}>{item.icon}</div>
               <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '4px' }}>{item.label}</div>
               <div style={{ fontSize: '15px', fontWeight: 700, color: item.color }}>{item.value}</div>
@@ -177,32 +154,16 @@ export default function Dashboard() {
         </div>
 
         {/* Referral Banner */}
-        <div style={{
-          background: 'linear-gradient(135deg, rgba(0,212,255,0.08), rgba(124,58,237,0.08))',
-          border: '1px solid rgba(0,212,255,0.15)',
-          borderRadius: '20px',
-          padding: '28px 24px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '24px',
-          flexWrap: 'wrap'
-        }}>
+        <div style={{ background: 'linear-gradient(135deg, rgba(0,212,255,0.08), rgba(124,58,237,0.08))', border: '1px solid rgba(0,212,255,0.15)', borderRadius: '20px', padding: '28px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '24px', flexWrap: 'wrap' }}>
           <div>
             <h3 style={{ fontSize: '16px', fontWeight: 800, marginBottom: '8px' }}>🔗 Share Referral Code Anda</h3>
-            <p style={{ fontSize: '13px', color: '#94a3b8' }}>Setiap kawan yang join — anda dapat RM5 atau RM10 setiap bulan!</p>
+            <p style={{ fontSize: '13px', color: '#94a3b8' }}>Setiap kawan yang join — anda dapat <strong style={{ color: '#00d4ff' }}>RM5 per subjek</strong> setiap bulan secara berulang!</p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{ background: 'rgba(0,212,255,0.1)', border: '1px solid rgba(0,212,255,0.3)', borderRadius: '12px', padding: '10px 20px', fontSize: '18px', fontWeight: 900, color: '#00d4ff', letterSpacing: '2px' }}>
               {student?.referralCode}
             </div>
-            <button
-              onClick={() => {
-                navigator.clipboard.writeText(student?.referralCode);
-                alert('Kod disalin!');
-              }}
-              style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', border: 'none', color: '#fff', padding: '10px 20px', borderRadius: '12px', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}
-            >
+            <button onClick={() => { navigator.clipboard.writeText(student?.referralCode); alert('Kod disalin!'); }} style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', border: 'none', color: '#fff', padding: '10px 20px', borderRadius: '12px', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}>
               Copy
             </button>
           </div>
