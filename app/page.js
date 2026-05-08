@@ -175,7 +175,7 @@ export default function LandingPage() {
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '40px', textAlign: 'left' }}>
                 {[
-                  '✓ Pilih 1 subjek — Math, Science, Sejarah, BM atau English',
+                  '✓ Pilih 1 subjek — Math, Add Math, Science, Biology, Physics atau Chemistry',
                   '✓ Zed BFF 24/7 — sabar, tak pernah marah',
                   '✓ Silibus KSSM Form 4 & Form 5',
                   '✓ SPM Past Year Checker',
