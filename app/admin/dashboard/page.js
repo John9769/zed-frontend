@@ -58,7 +58,8 @@ export default function AdminDashboard() {
           {[
             { label: 'Dashboard', path: '/admin/dashboard' },
             { label: 'Pelajar', path: '/admin/students' },
-            { label: 'Kandungan RAG', path: '/admin/content' }
+            { label: 'Kandungan RAG', path: '/admin/content' },
+            { label: 'Perbualan', path: '/admin/conversations' }
           ].map((item, i) => (
             <button key={i} onClick={() => router.push(item.path)} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8', padding: '6px 14px', borderRadius: '8px', fontSize: '13px', cursor: 'pointer' }}>
               {item.label}
@@ -104,7 +105,8 @@ export default function AdminDashboard() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
           {[
             { label: '👥 Urus Pelajar', desc: 'Lihat, aktifkan, gantung akaun', path: '/admin/students', color: '#00d4ff' },
-            { label: '📚 Tambah Kandungan', desc: 'Seed RAG syllabus & soalan lalu', path: '/admin/content', color: '#7c3aed' }
+            { label: '📚 Tambah Kandungan', desc: 'Seed RAG syllabus & soalan lalu', path: '/admin/content', color: '#7c3aed' },
+            { label: '💬 Perbualan Pelajar', desc: 'Semak semua sesi chat dengan Zed', path: '/admin/conversations', color: '#10b981' }
           ].map((item, i) => (
             <div key={i} onClick={() => router.push(item.path)} style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${item.color}20`, borderRadius: '16px', padding: '24px', cursor: 'pointer', transition: 'all 0.3s ease' }}
               onMouseEnter={e => e.currentTarget.style.border = `1px solid ${item.color}50`}
