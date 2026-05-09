@@ -5,10 +5,12 @@ import axios from 'axios';
 
 const SUBJECTS = [
   { value: 'MATH', label: 'Matematik', icon: '📐', color: '#ff2d78' },
+  { value: 'ADD_MATH', label: 'Add Matematik', icon: '🧮', color: '#00d4ff' },
   { value: 'SCIENCE', label: 'Sains', icon: '🔬', color: '#10b981' },
-  { value: 'SEJARAH', label: 'Sejarah', icon: '🏛️', color: '#f59e0b' },
-  { value: 'BM', label: 'Bahasa Melayu', icon: '📖', color: '#00d4ff' },
-  { value: 'ENGLISH', label: 'English', icon: '🌍', color: '#7c3aed' }
+  { value: 'ADD_SCIENCE', label: 'Add Sains', icon: '🧪', color: '#06b6d4' },
+  { value: 'BIOLOGY', label: 'Biologi', icon: '🧬', color: '#84cc16' },
+  { value: 'PHYSICS', label: 'Fizik', icon: '⚡', color: '#f59e0b' },
+  { value: 'CHEMISTRY', label: 'Kimia', icon: '⚗️', color: '#a78bfa' }
 ];
 
 export default function AddSubject() {
@@ -68,7 +70,6 @@ export default function AddSubject() {
     <main style={{ background: '#070714', minHeight: '100vh', color: '#fff', fontFamily: 'Inter, sans-serif', padding: '32px 24px' }}>
       <div style={{ maxWidth: '520px', margin: '0 auto' }}>
 
-        {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '40px' }}>
           <button onClick={() => router.push('/dashboard')} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8', padding: '8px 16px', borderRadius: '8px', fontSize: '13px', cursor: 'pointer' }}>
             ← Balik
@@ -79,7 +80,6 @@ export default function AddSubject() {
           </div>
         </div>
 
-        {/* Price reminder */}
         <div style={{ background: 'rgba(0,212,255,0.06)', border: '1px solid rgba(0,212,255,0.15)', borderRadius: '16px', padding: '16px 20px', marginBottom: '28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
             <div style={{ fontSize: '13px', color: '#00d4ff', fontWeight: 700 }}>🎯 Harga Early Bird</div>
@@ -88,7 +88,6 @@ export default function AddSubject() {
           <div style={{ fontSize: '20px', fontWeight: 900, color: '#00d4ff' }}>RM19.99</div>
         </div>
 
-        {/* Subject grid */}
         <div style={{ marginBottom: '28px' }}>
           <label style={{ fontSize: '13px', color: '#94a3b8', fontWeight: 600, display: 'block', marginBottom: '16px' }}>Pilih subjek baru</label>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>

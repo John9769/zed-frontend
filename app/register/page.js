@@ -4,11 +4,13 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 
 const SUBJECTS = [
-  { value: 'MATH', label: 'Matematik', icon: '📐', available: true },
-  { value: 'SCIENCE', label: 'Sains', icon: '🔬', available: true },
-  { value: 'SEJARAH', label: 'Sejarah', icon: '📜', available: true },
-  { value: 'BM', label: 'Bahasa Melayu', icon: '✍️', available: true },
-  { value: 'ENGLISH', label: 'English', icon: '🗣️', available: true }
+  { value: 'MATH', label: 'Matematik', icon: '📐' },
+  { value: 'ADD_MATH', label: 'Add Matematik', icon: '🧮' },
+  { value: 'SCIENCE', label: 'Sains', icon: '🔬' },
+  { value: 'ADD_SCIENCE', label: 'Add Sains', icon: '🧪' },
+  { value: 'BIOLOGY', label: 'Biologi', icon: '🧬' },
+  { value: 'PHYSICS', label: 'Fizik', icon: '⚡' },
+  { value: 'CHEMISTRY', label: 'Kimia', icon: '⚗️' }
 ];
 
 const EARLY_BIRD_PRICE = 19.99;
@@ -155,15 +157,12 @@ function RegisterPage() {
             {step === 1 ? 'Langkah 1/2 — Pilih subjek & maklumat pelajar' : 'Langkah 2/2 — Untuk proses kelulusan kelak'}
           </p>
 
-          {/* Progress bar */}
           <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '4px', height: '4px', marginBottom: '32px' }}>
             <div style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', height: '4px', borderRadius: '4px', width: step === 1 ? '50%' : '100%', transition: 'width 0.3s ease' }} />
           </div>
 
           {step === 1 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-
-              {/* Subject Selection */}
               <div>
                 <label style={labelStyle}>Pilih 1 Subjek</label>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
@@ -192,9 +191,7 @@ function RegisterPage() {
                     </div>
                   ))}
                 </div>
-                <p style={{ fontSize: '11px', color: '#475569', marginTop: '8px' }}>
-                  * Boleh tambah subjek lain kemudian
-                </p>
+                <p style={{ fontSize: '11px', color: '#475569', marginTop: '8px' }}>* Boleh tambah subjek lain kemudian</p>
               </div>
 
               <div><label style={labelStyle}>Nama Penuh</label><input name="studentName" value={form.studentName} onChange={handle} placeholder="Nama anda" style={inputStyle} /></div>
@@ -226,7 +223,6 @@ function RegisterPage() {
               </div>
               <div><label style={labelStyle}>Nombor WhatsApp Ibu/Bapa</label><input name="parentWhatsapp" value={form.parentWhatsapp} onChange={handle} placeholder="0123456789" style={inputStyle} /></div>
 
-              {/* Summary */}
               <div style={{ background: 'rgba(124,58,237,0.06)', border: '1px solid rgba(124,58,237,0.15)', borderRadius: '12px', padding: '16px' }}>
                 <div style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '10px', fontWeight: 700 }}>Ringkasan Pendaftaran:</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>

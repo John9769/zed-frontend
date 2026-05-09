@@ -3,11 +3,13 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 const SUBJECT_MAP = {
-  BM: { label: 'Bahasa Melayu', icon: '📖', color: '#00d4ff', desc: 'Komsas, Karangan, Tatabahasa' },
-  ENGLISH: { label: 'English', icon: '🌍', color: '#7c3aed', desc: 'Literature, Essay, Grammar' },
-  MATH: { label: 'Mathematics', icon: '📐', color: '#ff2d78', desc: 'Algebra, Calculus, Statistics' },
-  SCIENCE: { label: 'Science', icon: '🔬', color: '#10b981', desc: 'Biology, Chemistry, Physics' },
-  SEJARAH: { label: 'Sejarah', icon: '🏛️', color: '#f59e0b', desc: 'Kesultanan, Kemerdekaan, Perlembagaan' }
+  MATH: { label: 'Matematik', icon: '📐', color: '#ff2d78', desc: 'Algebra, Geometry, Statistics' },
+  ADD_MATH: { label: 'Add Matematik', icon: '🧮', color: '#00d4ff', desc: 'Calculus, Progressions, Linear Law' },
+  SCIENCE: { label: 'Sains', icon: '🔬', color: '#10b981', desc: 'Physics, Chemistry, Biology Basics' },
+  ADD_SCIENCE: { label: 'Add Sains', icon: '🧪', color: '#06b6d4', desc: 'Advanced Science Concepts' },
+  BIOLOGY: { label: 'Biologi', icon: '🧬', color: '#84cc16', desc: 'Cell Biology, Genetics, Ecology' },
+  PHYSICS: { label: 'Fizik', icon: '⚡', color: '#f59e0b', desc: 'Mechanics, Waves, Electricity' },
+  CHEMISTRY: { label: 'Kimia', icon: '⚗️', color: '#a78bfa', desc: 'Organic, Inorganic, Electrochemistry' }
 };
 
 export default function Dashboard() {
