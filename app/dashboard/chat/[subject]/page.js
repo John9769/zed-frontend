@@ -300,7 +300,7 @@ export default function ZedChat() {
           </button>
         </div>
         <p style={{ textAlign: 'center', fontSize: '10px', color: '#52525b', marginTop: '6px' }}>
-          📎 Upload soalan • Enter hantar • Shift+Enter baris baru
+          📎 Upload soalan • Enter hantar • Shift+Enter baris baru • Zed AI — semak semula dengan guru untuk kepastian 📚
         </p>
       </div>
 
