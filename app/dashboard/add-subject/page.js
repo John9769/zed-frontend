@@ -12,6 +12,12 @@ const SUBJECTS = [
   { value: 'CHEMISTRY', label: 'Kimia', icon: '⚗️', color: '#a78bfa' }
 ];
 
+const glass = {
+  background: 'rgba(255,255,255,0.03)',
+  backdropFilter: 'blur(12px)',
+  border: '1px solid rgba(255,255,255,0.08)',
+};
+
 export default function AddSubject() {
   const router = useRouter();
   const [student, setStudent] = useState(null);
@@ -51,14 +57,14 @@ export default function AddSubject() {
   };
 
   if (success) return (
-    <main style={{ background: '#070714', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', fontFamily: 'Inter, sans-serif' }}>
-      <div style={{ textAlign: 'center', maxWidth: '400px' }}>
-        <div style={{ fontSize: '64px', marginBottom: '24px' }}>✅</div>
-        <h2 style={{ fontSize: '24px', fontWeight: 900, color: '#fff', marginBottom: '12px' }}>Permintaan Dihantar!</h2>
-        <p style={{ color: '#94a3b8', fontSize: '15px', lineHeight: 1.7, marginBottom: '32px' }}>
+    <main style={{ background: '#050508', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: 'Inter, sans-serif' }}>
+      <div style={{ textAlign: 'center', maxWidth: '360px' }}>
+        <div style={{ fontSize: '48px', marginBottom: '12px' }}>✅</div>
+        <h2 style={{ fontSize: '22px', fontWeight: 900, color: '#fff', marginBottom: '8px', letterSpacing: '-0.5px' }}>Permintaan Dihantar!</h2>
+        <p style={{ color: '#a1a1aa', fontSize: '13px', lineHeight: 1.6, marginBottom: '24px' }}>
           WhatsApp telah dihantar kepada ibu/bapa anda untuk bayaran subjek baru. Subjek akan diaktifkan selepas bayaran berjaya.
         </p>
-        <button onClick={() => router.push('/dashboard')} style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', border: 'none', color: '#fff', padding: '14px 32px', borderRadius: '12px', fontSize: '15px', fontWeight: 700, cursor: 'pointer' }}>
+        <button onClick={() => router.push('/dashboard')} style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', border: 'none', color: '#fff', padding: '12px 28px', borderRadius: '10px', fontSize: '13px', fontWeight: 800, cursor: 'pointer' }}>
           Kembali ke Dashboard
         </button>
       </div>
@@ -66,30 +72,33 @@ export default function AddSubject() {
   );
 
   return (
-    <main style={{ background: '#070714', minHeight: '100vh', color: '#fff', fontFamily: 'Inter, sans-serif', padding: '32px 24px' }}>
-      <div style={{ maxWidth: '520px', margin: '0 auto' }}>
+    <main style={{ background: '#050508', minHeight: '100vh', color: '#fff', fontFamily: 'Inter, sans-serif', padding: '20px' }}>
+      <div style={{ maxWidth: '480px', margin: '0 auto' }}>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '40px' }}>
-          <button onClick={() => router.push('/dashboard')} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8', padding: '8px 16px', borderRadius: '8px', fontSize: '13px', cursor: 'pointer' }}>
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+          <button onClick={() => router.push('/dashboard')} style={{ ...glass, color: '#a1a1aa', padding: '7px 14px', borderRadius: '8px', fontSize: '12px', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.08)' }}>
             ← Balik
           </button>
           <div>
-            <h1 style={{ fontSize: '20px', fontWeight: 900 }}>Tambah Subjek</h1>
-            <p style={{ fontSize: '13px', color: '#94a3b8' }}>RM19.99/bulan • Early Bird</p>
+            <h1 style={{ fontSize: '18px', fontWeight: 900, letterSpacing: '-0.5px' }}>Tambah Subjek</h1>
+            <p style={{ fontSize: '11px', color: '#71717a', fontWeight: 700 }}>RM19.99/bulan • Early Bird</p>
           </div>
         </div>
 
-        <div style={{ background: 'rgba(0,212,255,0.06)', border: '1px solid rgba(0,212,255,0.15)', borderRadius: '16px', padding: '16px 20px', marginBottom: '28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {/* Price reminder */}
+        <div style={{ background: 'rgba(0,212,255,0.05)', border: '1px solid rgba(0,212,255,0.12)', borderRadius: '12px', padding: '14px 16px', marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
-            <div style={{ fontSize: '13px', color: '#00d4ff', fontWeight: 700 }}>🎯 Harga Early Bird</div>
-            <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '2px' }}>Terhad untuk 10,000 pelajar pertama</div>
+            <div style={{ fontSize: '11px', color: '#00d4ff', fontWeight: 800, letterSpacing: '0.5px' }}>🎯 HARGA EARLY BIRD</div>
+            <div style={{ fontSize: '10px', color: '#71717a', marginTop: '2px' }}>Terhad untuk 10,000 pelajar pertama</div>
           </div>
-          <div style={{ fontSize: '20px', fontWeight: 900, color: '#00d4ff' }}>RM19.99</div>
+          <div style={{ fontSize: '18px', fontWeight: 900, color: '#00d4ff', letterSpacing: '-1px' }}>RM19.99</div>
         </div>
 
-        <div style={{ marginBottom: '28px' }}>
-          <label style={{ fontSize: '13px', color: '#94a3b8', fontWeight: 600, display: 'block', marginBottom: '16px' }}>Pilih subjek baru</label>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+        {/* Subject grid */}
+        <div style={{ marginBottom: '20px' }}>
+          <div style={{ fontSize: '10px', color: '#71717a', fontWeight: 800, letterSpacing: '0.5px', marginBottom: '12px' }}>PILIH SUBJEK BARU</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
             {SUBJECTS.map(s => {
               const subscribed = alreadySubscribed.includes(s.value);
               const isSelected = selected === s.value;
@@ -98,19 +107,19 @@ export default function AddSubject() {
                   key={s.value}
                   onClick={() => !subscribed && setSelected(s.value)}
                   style={{
-                    border: `1px solid ${isSelected ? s.color : subscribed ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.1)'}`,
-                    background: isSelected ? `${s.color}12` : subscribed ? 'rgba(255,255,255,0.02)' : 'rgba(255,255,255,0.03)',
-                    borderRadius: '14px',
-                    padding: '16px',
+                    border: `1px solid ${isSelected ? s.color : subscribed ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.08)'}`,
+                    background: isSelected ? `${s.color}10` : subscribed ? 'rgba(255,255,255,0.02)' : 'rgba(255,255,255,0.03)',
+                    borderRadius: '12px',
+                    padding: '14px 8px',
                     cursor: subscribed ? 'not-allowed' : 'pointer',
-                    opacity: subscribed ? 0.4 : 1,
+                    opacity: subscribed ? 0.35 : 1,
                     textAlign: 'center',
-                    transition: 'all 0.2s ease'
+                    transition: 'all 0.15s ease'
                   }}
                 >
-                  <div style={{ fontSize: '24px', marginBottom: '8px' }}>{s.icon}</div>
-                  <div style={{ fontSize: '13px', fontWeight: 700, color: isSelected ? s.color : '#fff' }}>{s.label}</div>
-                  {subscribed && <div style={{ fontSize: '10px', color: '#64748b', marginTop: '4px' }}>Sudah langgan</div>}
+                  <div style={{ fontSize: '22px', marginBottom: '6px' }}>{s.icon}</div>
+                  <div style={{ fontSize: '10px', fontWeight: 800, color: isSelected ? s.color : '#a1a1aa' }}>{s.label}</div>
+                  {subscribed && <div style={{ fontSize: '9px', color: '#52525b', marginTop: '3px' }}>Sudah langgan</div>}
                 </div>
               );
             })}
@@ -118,19 +127,19 @@ export default function AddSubject() {
         </div>
 
         {error && (
-          <div style={{ background: 'rgba(255,45,120,0.1)', border: '1px solid rgba(255,45,120,0.3)', borderRadius: '12px', padding: '12px 16px', marginBottom: '20px' }}>
-            <p style={{ color: '#ff2d78', fontSize: '13px' }}>{error}</p>
+          <div style={{ background: 'rgba(255,45,120,0.06)', border: '1px solid rgba(255,45,120,0.15)', borderRadius: '10px', padding: '10px 14px', marginBottom: '16px' }}>
+            <p style={{ color: '#ff2d78', fontSize: '12px' }}>{error}</p>
           </div>
         )}
 
         <button
           onClick={handleAdd}
           disabled={loading || !selected}
-          style={{ width: '100%', background: !selected || loading ? 'rgba(0,212,255,0.2)' : 'linear-gradient(135deg, #00d4ff, #7c3aed)', border: 'none', color: '#fff', padding: '16px', borderRadius: '12px', fontSize: '15px', fontWeight: 700, cursor: !selected || loading ? 'not-allowed' : 'pointer', boxShadow: selected ? '0 0 20px rgba(0,212,255,0.3)' : 'none' }}>
+          style={{ width: '100%', background: !selected || loading ? 'rgba(0,212,255,0.15)' : 'linear-gradient(135deg, #00d4ff, #7c3aed)', border: 'none', color: '#fff', padding: '14px', borderRadius: '10px', fontSize: '13px', fontWeight: 800, cursor: !selected || loading ? 'not-allowed' : 'pointer' }}>
           {loading ? 'Memproses...' : selected ? `Tambah ${SUBJECTS.find(s => s.value === selected)?.label} — RM19.99/bulan →` : 'Pilih subjek dahulu'}
         </button>
 
-        <p style={{ fontSize: '12px', color: '#475569', textAlign: 'center', marginTop: '16px' }}>
+        <p style={{ fontSize: '11px', color: '#52525b', textAlign: 'center', marginTop: '12px' }}>
           WhatsApp akan dihantar ke ibu/bapa anda untuk kelulusan bayaran.
         </p>
       </div>

@@ -4,10 +4,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 const SUBJECT_LABELS = {
   MATH: { label: 'Matematik', icon: '📐' },
+  ADD_MATH: { label: 'Add Matematik', icon: '🧮' },
   SCIENCE: { label: 'Sains', icon: '🔬' },
-  SEJARAH: { label: 'Sejarah', icon: '📜' },
-  BM: { label: 'Bahasa Melayu', icon: '✍️' },
-  ENGLISH: { label: 'English', icon: '🗣️' }
+  BIOLOGY: { label: 'Biologi', icon: '🧬' },
+  PHYSICS: { label: 'Fizik', icon: '⚡' },
+  CHEMISTRY: { label: 'Kimia', icon: '⚗️' }
 };
 
 function PaymentSuccessPage() {
@@ -16,40 +17,49 @@ function PaymentSuccessPage() {
   const subject = searchParams.get('subject');
   const subjectInfo = subject ? SUBJECT_LABELS[subject] : null;
 
+  const glass = {
+    background: 'rgba(255,255,255,0.03)',
+    backdropFilter: 'blur(12px)',
+    border: '1px solid rgba(255,255,255,0.08)',
+  };
+
   return (
-    <main style={{ background: '#070714', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', fontFamily: 'Inter, sans-serif' }}>
-      <div style={{ textAlign: 'center', maxWidth: '480px' }}>
-        <div style={{ fontSize: '72px', marginBottom: '24px' }}>🎉</div>
-        <h1 style={{ fontSize: '28px', fontWeight: 900, color: '#fff', marginBottom: '16px' }}>
+    <main style={{ background: '#050508', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: 'Inter, sans-serif' }}>
+      <div style={{ textAlign: 'center', maxWidth: '400px', width: '100%' }}>
+
+        <div style={{ fontSize: '56px', marginBottom: '12px' }}>🎉</div>
+
+        <h1 style={{ fontSize: '26px', fontWeight: 900, color: '#fff', marginBottom: '8px', letterSpacing: '-1px' }}>
           Pembayaran Berjaya!
         </h1>
-        <p style={{ fontSize: '16px', color: '#94a3b8', lineHeight: 1.7, marginBottom: '24px' }}>
+        <p style={{ fontSize: '13px', color: '#a1a1aa', lineHeight: 1.6, marginBottom: '20px' }}>
           Akaun anak anda telah diaktifkan. Zed sudah bersedia untuk menjadi BFF belajar mereka. 🧠
         </p>
 
         {subjectInfo && (
-          <div style={{ background: 'rgba(124,58,237,0.08)', border: '1px solid rgba(124,58,237,0.2)', borderRadius: '16px', padding: '20px', marginBottom: '20px' }}>
-            <div style={{ fontSize: '32px', marginBottom: '8px' }}>{subjectInfo.icon}</div>
-            <div style={{ fontSize: '16px', fontWeight: 700, color: '#a78bfa' }}>{subjectInfo.label} — Diaktifkan!</div>
+          <div style={{ background: 'rgba(124,58,237,0.06)', border: '1px solid rgba(124,58,237,0.15)', borderRadius: '14px', padding: '16px', marginBottom: '12px' }}>
+            <div style={{ fontSize: '28px', marginBottom: '6px' }}>{subjectInfo.icon}</div>
+            <div style={{ fontSize: '14px', fontWeight: 800, color: '#a78bfa', letterSpacing: '-0.5px' }}>{subjectInfo.label} — Diaktifkan!</div>
           </div>
         )}
 
-        <div style={{ background: 'rgba(0,212,255,0.08)', border: '1px solid rgba(0,212,255,0.2)', borderRadius: '16px', padding: '20px', marginBottom: '20px' }}>
-          <p style={{ color: '#00d4ff', fontSize: '14px', lineHeight: 1.7 }}>
-            Sila minta anak anda login di <strong>zed.my</strong> menggunakan nombor mobile dan password yang didaftarkan.
+        <div style={{ background: 'rgba(0,212,255,0.05)', border: '1px solid rgba(0,212,255,0.15)', borderRadius: '14px', padding: '16px', marginBottom: '12px' }}>
+          <p style={{ color: '#00d4ff', fontSize: '12px', lineHeight: 1.6 }}>
+            Sila minta anak anda login di <strong>zed-frontend-pi.vercel.app</strong> menggunakan nombor mobile dan password yang didaftarkan.
           </p>
         </div>
 
-        <div style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '16px', padding: '20px', marginBottom: '28px' }}>
-          <p style={{ color: '#10b981', fontSize: '13px', lineHeight: 1.7 }}>
+        <div style={{ background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.15)', borderRadius: '14px', padding: '16px', marginBottom: '24px' }}>
+          <p style={{ color: '#10b981', fontSize: '12px', lineHeight: 1.6 }}>
             💡 Anak anda boleh tambah subjek lain pada bila-bila masa dari dashboard mereka.
           </p>
         </div>
 
-        <img src="/assets/Zed.png" alt="Zed" style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid rgba(0,212,255,0.4)', boxShadow: '0 0 30px rgba(0,212,255,0.3)' }} />
-        <p style={{ fontSize: '14px', color: '#94a3b8', marginTop: '16px' }}>
+        <img src="/assets/Zed.png" alt="Zed" style={{ width: '72px', height: '72px', borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(0,212,255,0.3)', boxShadow: '0 0 20px rgba(0,212,255,0.15)', marginBottom: '10px' }} />
+        <p style={{ fontSize: '12px', color: '#71717a' }}>
           "Hai! Saya Zed. Jom kita buat SPM sama-sama!" 🚀
         </p>
+
       </div>
     </main>
   );
@@ -57,7 +67,7 @@ function PaymentSuccessPage() {
 
 export default function PaymentSuccessWrapper() {
   return (
-    <Suspense fallback={<div style={{ background: '#070714', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#00d4ff' }}>Loading...</div>}>
+    <Suspense fallback={<div style={{ background: '#050508', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#00d4ff', fontFamily: 'Inter, sans-serif' }}>Loading...</div>}>
       <PaymentSuccessPage />
     </Suspense>
   );
