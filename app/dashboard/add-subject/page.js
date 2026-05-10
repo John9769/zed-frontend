@@ -7,7 +7,6 @@ const SUBJECTS = [
   { value: 'MATH', label: 'Matematik', icon: '📐', color: '#ff2d78' },
   { value: 'ADD_MATH', label: 'Add Matematik', icon: '🧮', color: '#00d4ff' },
   { value: 'SCIENCE', label: 'Sains', icon: '🔬', color: '#10b981' },
-  { value: 'ADD_SCIENCE', label: 'Add Sains', icon: '🧪', color: '#06b6d4' },
   { value: 'BIOLOGY', label: 'Biologi', icon: '🧬', color: '#84cc16' },
   { value: 'PHYSICS', label: 'Fizik', icon: '⚡', color: '#f59e0b' },
   { value: 'CHEMISTRY', label: 'Kimia', icon: '⚗️', color: '#a78bfa' }

@@ -7,7 +7,6 @@ const SUBJECTS = [
   { value: 'MATH', label: 'Matematik', icon: '📐' },
   { value: 'ADD_MATH', label: 'Add Matematik', icon: '🧮' },
   { value: 'SCIENCE', label: 'Sains', icon: '🔬' },
-  { value: 'ADD_SCIENCE', label: 'Add Sains', icon: '🧪' },
   { value: 'BIOLOGY', label: 'Biologi', icon: '🧬' },
   { value: 'PHYSICS', label: 'Fizik', icon: '⚡' },
   { value: 'CHEMISTRY', label: 'Kimia', icon: '⚗️' }

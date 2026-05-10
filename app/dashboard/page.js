@@ -6,7 +6,6 @@ const SUBJECT_MAP = {
   MATH: { label: 'Matematik', icon: '📐', color: '#ff2d78', desc: 'Algebra, Geometry, Statistics' },
   ADD_MATH: { label: 'Add Matematik', icon: '🧮', color: '#00d4ff', desc: 'Calculus, Progressions, Linear Law' },
   SCIENCE: { label: 'Sains', icon: '🔬', color: '#10b981', desc: 'Physics, Chemistry, Biology Basics' },
-  ADD_SCIENCE: { label: 'Add Sains', icon: '🧪', color: '#06b6d4', desc: 'Advanced Science Concepts' },
   BIOLOGY: { label: 'Biologi', icon: '🧬', color: '#84cc16', desc: 'Cell Biology, Genetics, Ecology' },
   PHYSICS: { label: 'Fizik', icon: '⚡', color: '#f59e0b', desc: 'Mechanics, Waves, Electricity' },
   CHEMISTRY: { label: 'Kimia', icon: '⚗️', color: '#a78bfa', desc: 'Organic, Inorganic, Electrochemistry' }
