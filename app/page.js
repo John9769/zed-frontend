@@ -30,7 +30,7 @@ export default function LandingPage() {
         <div style={{ position: 'absolute', top: '20%', left: '10%', width: '300px', height: '300px', background: 'rgba(0,212,255,0.08)', borderRadius: '50%', filter: 'blur(80px)' }} />
         <div style={{ position: 'absolute', bottom: '20%', right: '10%', width: '400px', height: '400px', background: 'rgba(124,58,237,0.1)', borderRadius: '50%', filter: 'blur(100px)' }} />
 
-        <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%', display: 'flex', alignItems: 'center', gap: '60px', position: 'relative', zIndex: 1 }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%', display: 'flex', alignItems: 'center', gap: '60px', position: 'relative', zIndex: 1, flexWrap: 'wrap' }}>
           <div style={{ flex: 1 }}>
             <div style={{ display: 'inline-block', background: 'rgba(0,212,255,0.1)', border: '1px solid rgba(0,212,255,0.3)', borderRadius: '50px', padding: '6px 16px', fontSize: '12px', color: '#00d4ff', fontWeight: 600, marginBottom: '24px', letterSpacing: '2px' }}>
               🇲🇾 MALAYSIA'S FIRST AI STUDY BFF
@@ -133,7 +133,7 @@ export default function LandingPage() {
           <p style={{ fontSize: '18px', color: '#94a3b8', lineHeight: 1.8, marginBottom: '48px' }}>
             Refer kawan subscribe 3 subjek = RM15 sebulan masuk akaun anda. Dalam setahun, boleh ada RM180+ dalam Zed Fund. Lepas SPM — guna untuk yuran kolej, laptop, lesen memandu. Tiada pusat tuisyen mana-mana di Malaysia yang buat ni.
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '48px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px', marginBottom: '48px' }}>
             {[
               { label: 'Setiap subjek', credit: 'RM5 / bulan', color: '#00d4ff' },
               { label: 'Kawan subscribe 3 subjek', credit: 'RM15 / bulan', color: '#7c3aed' },
@@ -168,7 +168,7 @@ export default function LandingPage() {
 
               <div style={{ fontSize: '14px', color: '#94a3b8', marginBottom: '8px' }}>Harga per subjek</div>
               <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: '8px', marginBottom: '4px' }}>
-                <div style={{ fontSize: '64px', fontWeight: 900, color: '#00d4ff', lineHeight: 1 }}>RM19.99</div>
+                <div style={{ fontSize: '48px', fontWeight: 900, color: '#00d4ff', lineHeight: 1 }}>RM19.99</div>
               </div>
               <div style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '8px' }}>/bulan • Early Bird</div>
               <div style={{ fontSize: '13px', color: '#475569', textDecoration: 'line-through', marginBottom: '32px' }}>Harga biasa RM29.99/bulan</div>
