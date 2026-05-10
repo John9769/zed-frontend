@@ -70,7 +70,7 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div style={{ flex: 1, display: 'flex', justifyContent: 'center', position: 'relative' }}>
+          <div style={{ flex: 1, display: 'flex', justifyContent: 'center', position: 'relative', order: -1 }}>
             <div style={{ position: 'relative', width: '420px', height: '520px', borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(0,212,255,0.2)', boxShadow: '0 0 60px rgba(0,212,255,0.2), 0 0 120px rgba(124,58,237,0.15)' }}>
               <video autoPlay muted playsInline style={{ width: '100%', height: '100%', objectFit: 'cover' }} poster="/assets/Zed.png">
                 <source src="/assets/Zed.mp4" type="video/mp4" />
@@ -100,7 +100,7 @@ export default function LandingPage() {
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '64px' }}>
             <div style={{ fontSize: '12px', color: '#00d4ff', fontWeight: 700, letterSpacing: '3px', marginBottom: '16px' }}>MACAM MANA ZED WORKS</div>
-            <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900 }}>Simple je.{' '}<span style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>4 langkah.</span></h2>
+            <h2 style={{ fontSize: 'clamp(32px, 4vw, 48px)', fontWeight: 900 }}>Simple je.<br /><span style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>4 langkah.</span></h2>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px' }}>
             {[
@@ -125,8 +125,8 @@ export default function LandingPage() {
         <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
           <div style={{ fontSize: '48px', marginBottom: '24px' }}>💰</div>
           <div style={{ fontSize: '12px', color: '#7c3aed', fontWeight: 700, letterSpacing: '3px', marginBottom: '16px' }}>ZED FUND — TIADA TANDINGAN DI DUNIA</div>
-          <h2 style={{ fontSize: 'clamp(32px, 4vw, 56px)', fontWeight: 900, marginBottom: '24px' }}>
-            Belajar SPM.{' '}
+          <h2 style={{ fontSize: 'clamp(22px, 3vw, 44px)', fontWeight: 900, marginBottom: '24px' }}>
+            Belajar SPM.<br />
             <span style={{ background: 'linear-gradient(135deg, #ff2d78, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Dapat duit balik.</span>
             <br />Tabung masa depan.
           </h2>
