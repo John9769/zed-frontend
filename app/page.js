@@ -12,254 +12,209 @@ export default function LandingPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // World-Class Design System Constants
-  const colors = {
-    bg: '#030303',
-    card: 'rgba(255, 255, 255, 0.03)',
-    border: 'rgba(255, 255, 255, 0.08)',
-    primary: '#00d4ff',
-    secondary: '#7c3aed',
-    accent: '#ff2d78',
-    textMuted: '#a1a1aa'
-  };
-
-  const glassEffect = {
-    background: colors.card,
+  const glassStyle = {
+    background: 'rgba(255, 255, 255, 0.03)',
     backdropFilter: 'blur(12px)',
-    WebkitBackdropFilter: 'blur(12px)',
-    border: `1px solid ${colors.border}`,
+    border: '1px solid rgba(255, 255, 255, 0.08)',
   };
 
   return (
-    <main style={{ background: colors.bg, minHeight: '100vh', color: '#fff', fontFamily: '"Inter", sans-serif', overflowX: 'hidden' }}>
+    <main style={{ background: '#050508', minHeight: '100vh', color: '#fff', fontFamily: '"Inter", sans-serif', overflowX: 'hidden' }}>
       
-      {/* GLOBAL REFINEMENTS */}
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-        button { transition: transform 0.2s ease, filter 0.2s ease !important; }
-        button:hover { transform: translateY(-1px); filter: brightness(1.2); }
-        button:active { transform: translateY(0px); }
-        .feature-card:hover { border-color: ${colors.primary}40 !important; transform: translateY(-2px); }
-        @media (max-width: 768px) {
-          .desktop-video { display: none !important; }
-          .mobile-video { display: block !important; }
-        }
-        @media (min-width: 769px) {
-          .mobile-video { display: none !important; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+        .btn-hover:hover { transform: translateY(-2px); filter: brightness(1.2); transition: all 0.2s; }
+        @media (max-width: 480px) {
+            .hero-btns { flex-direction: row !important; gap: 8px !important; }
+            .hero-btns button { padding: 12px 16px !important; font-size: 13px !important; flex: 1; }
         }
       `}</style>
 
       {/* NAVBAR */}
       <nav style={{ 
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, 
-        padding: scrolled ? '12px 32px' : '24px 32px', 
+        padding: scrolled ? '10px 20px' : '20px 20px', 
         display: 'flex', justifyContent: 'space-between', alignItems: 'center', 
-        background: scrolled ? 'rgba(3, 3, 3, 0.7)' : 'transparent', 
-        backdropFilter: scrolled ? 'blur(20px)' : 'none', 
-        borderBottom: scrolled ? `1px solid ${colors.border}` : 'none', 
-        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)' 
+        background: scrolled ? 'rgba(5,5,8,0.8)' : 'transparent', 
+        backdropFilter: scrolled ? 'blur(10px)' : 'none', 
+        transition: 'all 0.3s ease' 
       }}>
-        <div style={{ fontSize: '26px', fontWeight: 900, letterSpacing: '-1.5px', background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>ZED</div>
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          <button onClick={() => router.push('/login')} style={{ background: 'transparent', border: `1px solid ${colors.border}`, color: '#fff', padding: '10px 20px', borderRadius: '12px', cursor: 'pointer', fontSize: '14px', fontWeight: 600 }}>Login</button>
-          <button onClick={() => router.push('/register')} style={{ background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`, border: 'none', color: '#fff', padding: '10px 24px', borderRadius: '12px', cursor: 'pointer', fontSize: '14px', fontWeight: 700, boxShadow: `0 4px 20px ${colors.primary}30` }}>Join Zed</button>
+        <div style={{ fontSize: '22px', fontWeight: 900, background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>ZED</div>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button onClick={() => router.push('/login')} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '8px 16px', borderRadius: '10px', fontSize: '13px', fontWeight: 600 }}>Login</button>
+          <button onClick={() => router.push('/register')} style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', border: 'none', color: '#fff', padding: '8px 16px', borderRadius: '10px', fontSize: '13px', fontWeight: 700 }}>Join Zed</button>
         </div>
       </nav>
 
-      {/* HERO SECTION */}
+      {/* HERO SECTION - REENGINEERED SPACING */}
       <section style={{ 
-        minHeight: '90vh', padding: '140px 24px 60px', 
-        background: 'radial-gradient(circle at 50% 0%, #111122 0%, #030303 60%)',
-        position: 'relative' 
+        padding: '80px 20px 40px', 
+        background: 'radial-gradient(circle at 50% 0%, #15152e 0%, #050508 50%)',
+        position: 'relative'
       }}>
-        <div style={{ position: 'absolute', top: '10%', left: '10%', width: '35vw', height: '35vw', background: `${colors.primary}08`, borderRadius: '50%', filter: 'blur(100px)', pointerEvents: 'none' }} />
-        
-        <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '40px', flexWrap: 'wrap' }}>
-            
-            <div style={{ flex: '1.2', minWidth: '320px' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: `${colors.primary}15`, border: `1px solid ${colors.primary}30`, borderRadius: '100px', padding: '6px 14px', fontSize: '11px', color: colors.primary, fontWeight: 800, marginBottom: '24px', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
-                🇲🇾 Malaysia's First AI Study BFF
-              </div>
-
-              <h1 style={{ fontSize: 'clamp(42px, 7vw, 84px)', fontWeight: 900, lineHeight: 1, marginBottom: '24px', letterSpacing: '-3px' }}>
-                Meet{' '}
-                <span style={{ background: `linear-gradient(to right, ${colors.primary}, ${colors.secondary})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>ZED</span>
-                <br />Your SPM{' '}
-                <span style={{ background: `linear-gradient(to right, ${colors.accent}, #ff82b2)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>BFF</span>
-              </h1>
-
-              {/* MOBILE VIDEO */}
-              <div className="mobile-video" style={{ marginBottom: '32px' }}>
-                <div style={{ ...glassEffect, borderRadius: '24px', overflow: 'hidden', padding: '6px' }}>
-                  <video autoPlay muted playsInline style={{ width: '100%', height: '340px', objectFit: 'cover', borderRadius: '18px' }} poster="/assets/Zed.png">
-                    <source src="/assets/Zed.mp4" type="video/mp4" />
-                  </video>
-                </div>
-              </div>
-
-              <p style={{ fontSize: '18px', color: colors.textMuted, lineHeight: 1.6, marginBottom: '24px', maxWidth: '500px' }}>
-                Zed bukan sekadar AI tutor. Dia memahami bila anda penat, malas, atau stress — dan tetap ada untuk anda. 24/7. Tak pernah marah.
-              </p>
-              
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '32px' }}>
-                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: colors.primary, boxShadow: `0 0 12px ${colors.primary}` }} />
-                <p style={{ fontSize: '15px', color: colors.primary, fontWeight: 700, margin: 0 }}>
-                  ✦ Belajar SPM • Dapat duit balik • Tabung masa depan
-                </p>
-              </div>
-
-              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                <button onClick={() => router.push('/register')} style={{ background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`, border: 'none', color: '#fff', padding: '16px 36px', borderRadius: '14px', fontSize: '16px', fontWeight: 800, cursor: 'pointer', boxShadow: `0 10px 30px ${colors.primary}30` }}>
-                  Daftar Sekarang →
-                </button>
-                <button onClick={() => document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' })} style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid ${colors.border}`, color: '#fff', padding: '16px 36px', borderRadius: '14px', fontSize: '16px', fontWeight: 600, cursor: 'pointer' }}>
-                  Tengok Harga
-                </button>
-              </div>
-
-              <div style={{ marginTop: '48px', display: 'flex', gap: '32px' }}>
-                {[
-                  { number: '10,000', label: 'Slots Pengasas' },
-                  { number: 'RM5', label: 'Kredit/Subjek' },
-                  { number: '24/7', label: 'Zed Sedia' }
-                ].map((stat, i) => (
-                  <div key={i}>
-                    <div style={{ fontSize: '24px', fontWeight: 900, color: '#fff' }}>{stat.number}</div>
-                    <div style={{ fontSize: '11px', color: colors.textMuted, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginTop: '2px' }}>{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* DESKTOP VIDEO */}
-            <div className="desktop-video" style={{ flex: '1', display: 'flex', justifyContent: 'flex-end', position: 'relative' }}>
-              <div style={{ ...glassEffect, padding: '10px', borderRadius: '32px', width: '380px', position: 'relative', zIndex: 2 }}>
-                 <video autoPlay muted playsInline style={{ width: '100%', height: '520px', objectFit: 'cover', borderRadius: '24px' }} poster="/assets/Zed.png">
-                  <source src="/assets/Zed.mp4" type="video/mp4" />
-                </video>
-              </div>
-              {/* Floating Element 1 */}
-              <div style={{ position: 'absolute', top: '40px', right: '-30px', ...glassEffect, borderRadius: '16px', padding: '16px', zIndex: 3, width: '140px' }}>
-                <div style={{ fontSize: '20px', marginBottom: '4px' }}>🎓</div>
-                <div style={{ fontSize: '12px', color: colors.primary, fontWeight: 800 }}>First Adopter</div>
-                <div style={{ fontSize: '10px', color: colors.textMuted }}>10,000 slots sahaja</div>
-              </div>
-              {/* Floating Element 2 */}
-              <div style={{ position: 'absolute', bottom: '60px', left: '-20px', ...glassEffect, borderRadius: '16px', padding: '16px', zIndex: 3, border: `1px solid ${colors.secondary}40` }}>
-                <div style={{ fontSize: '20px', marginBottom: '4px' }}>💰</div>
-                <div style={{ fontSize: '12px', color: colors.secondary, fontWeight: 800 }}>Zed Fund</div>
-                <div style={{ fontSize: '10px', color: colors.textMuted }}>Tabung masa depan</div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* HOW IT WORKS */}
-      <section style={{ padding: '80px 24px' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-            <div style={{ fontSize: '13px', color: colors.primary, fontWeight: 800, letterSpacing: '4px', marginBottom: '12px' }}>MACAM MANA ZED WORKS</div>
-            <h2 style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 900, letterSpacing: '-2px' }}>
-              Simple je. <span style={{ background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>4 langkah.</span>
-            </h2>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
-            {[
-              { step: '01', icon: '📝', title: 'Daftar', desc: 'Pilih 1 subjek pada RM19.99/bulan. Isi nama, mobile, dan nombor WhatsApp ibu atau ayah.' },
-              { step: '02', icon: '📱', title: 'Parent Approve', desc: 'Zed hantar WhatsApp ke parent anda. Dia buka link, baca pasal Zed, dan bayar.' },
-              { step: '03', icon: '🧠', title: 'Mula Belajar', desc: 'Akaun terus aktif. Login dan mula chat dengan Zed untuk subjek anda. Tambah subjek bila-bila masa.' },
-              { step: '04', icon: '💰', title: 'Refer & Earn', desc: 'Share referral code anda. Setiap subjek yang kawan subscribe — anda dapat RM5 setiap bulan.' }
-            ].map((item, i) => (
-              <div key={i} className="feature-card" style={{ ...glassEffect, padding: '32px', borderRadius: '24px', position: 'relative', transition: 'all 0.3s ease' }}>
-                <div style={{ fontSize: '50px', fontWeight: 900, color: 'rgba(255,255,255,0.03)', position: 'absolute', top: '10px', right: '20px' }}>{item.step}</div>
-                <div style={{ fontSize: '36px', marginBottom: '20px' }}>{item.icon}</div>
-                <h3 style={{ fontSize: '19px', fontWeight: 700, marginBottom: '12px' }}>{item.title}</h3>
-                <p style={{ fontSize: '14px', color: colors.textMuted, lineHeight: 1.6, margin: 0 }}>{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ZED FUND */}
-      <section style={{ padding: '100px 24px', background: `radial-gradient(circle at center, #0d0525 0%, ${colors.bg} 100%)` }}>
-        <div style={{ maxWidth: '850px', margin: '0 auto', textAlign: 'center' }}>
-          <div style={{ fontSize: '56px', marginBottom: '20px' }}>💰</div>
-          <div style={{ fontSize: '12px', color: colors.secondary, fontWeight: 800, letterSpacing: '4px', marginBottom: '16px' }}>ZED FUND — TIADA TANDINGAN DI DUNIA</div>
-          <h2 style={{ fontSize: 'clamp(28px, 5vw, 52px)', fontWeight: 900, marginBottom: '24px', lineHeight: 1.1, letterSpacing: '-2px' }}>
-            Belajar SPM. <span style={{ background: `linear-gradient(135deg, ${colors.accent}, ${colors.secondary})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Dapat duit balik.</span><br/>Tabung masa depan.
-          </h2>
-          <p style={{ fontSize: '17px', color: colors.textMuted, lineHeight: 1.7, marginBottom: '40px' }}>
-            Refer kawan subscribe 3 subjek = RM15 sebulan masuk akaun anda. Dalam setahun, boleh ada RM180+ dalam Zed Fund. Lepas SPM — guna untuk yuran kolej, laptop, lesen memandu. Tiada pusat tuisyen mana-mana di Malaysia yang buat ni.
-          </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '12px' }}>
-            {[
-              { label: 'Setiap subjek', credit: 'RM5/bulan', color: colors.primary },
-              { label: 'Kawan 3 subjek', credit: 'RM15/bulan', color: colors.secondary },
-              { label: '10 kawan × 3', credit: 'RM150/bulan', color: colors.accent }
-            ].map((item, i) => (
-              <div key={i} style={{ ...glassEffect, borderRadius: '20px', padding: '24px 16px', border: `1px solid ${item.color}30` }}>
-                <div style={{ fontSize: '13px', color: colors.textMuted, marginBottom: '8px', fontWeight: 600 }}>{item.label}</div>
-                <div style={{ fontSize: '20px', fontWeight: 900, color: item.color }}>{item.credit}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* PRICING */}
-      <section id="pricing" style={{ padding: '100px 24px' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-            <div style={{ fontSize: '13px', color: colors.primary, fontWeight: 800, letterSpacing: '4px', marginBottom: '16px' }}>HARGA PENGASAS — 10,000 SLOT SAHAJA</div>
-            <h2 style={{ fontSize: '32px', fontWeight: 900, letterSpacing: '-1.5px' }}>
-              Tuisyen 1 subjek = RM100+/bulan. <span style={{ color: colors.primary }}>Zed?</span>
-            </h2>
-          </div>
+        <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center' }}>
           
-          <div style={{ maxWidth: '440px', margin: '0 auto' }}>
-            <div style={{ ...glassEffect, borderRadius: '32px', padding: '50px 32px', textAlign: 'center', position: 'relative', border: `1px solid ${colors.primary}40` }}>
-              <div style={{ position: 'absolute', top: '-16px', left: '50%', transform: 'translateX(-50%)', background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`, padding: '8px 24px', borderRadius: '100px', fontSize: '11px', fontWeight: 900, whiteSpace: 'nowrap', boxShadow: `0 4px 20px rgba(0,0,0,0.6)` }}>
-                🎯 EARLY BIRD — TERHAD 10,000 PELAJAR PERTAMA
+          {/* SS1: Badge pushed UP */}
+          <div style={{ display: 'inline-flex', background: 'rgba(0,212,255,0.1)', border: '1px solid rgba(0,212,255,0.2)', borderRadius: '100px', padding: '6px 14px', fontSize: '10px', color: '#00d4ff', fontWeight: 800, marginBottom: '16px', letterSpacing: '1px', textTransform: 'uppercase' }}>
+            🇲🇾 Malaysia's First AI Study BFF
+          </div>
+
+          {/* SS1: Heading pushed UP */}
+          <h1 style={{ fontSize: 'clamp(40px, 10vw, 72px)', fontWeight: 900, lineHeight: 0.9, marginBottom: '20px', letterSpacing: '-2px' }}>
+            Meet <span style={{ background: 'linear-gradient(to right, #00d4ff, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>ZED</span><br />
+            Your SPM <span style={{ background: 'linear-gradient(to right, #ff2d78, #ff82b2)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>BFF</span>
+          </h1>
+
+          {/* SS1: Video pushed UP */}
+          <div style={{ maxWidth: '400px', margin: '0 auto 30px', ...glassStyle, borderRadius: '24px', padding: '6px', boxShadow: '0 20px 50px rgba(0,0,0,0.5)' }}>
+            <video autoPlay muted playsInline style={{ width: '100%', height: '320px', objectFit: 'cover', borderRadius: '18px' }} poster="/assets/Zed.png">
+              <source src="/assets/Zed.mp4" type="video/mp4" />
+            </video>
+          </div>
+
+          {/* SS2: Text and Buttons Refined */}
+          <p style={{ fontSize: '16px', color: '#a1a1aa', lineHeight: 1.5, marginBottom: '20px', maxWidth: '500px', margin: '0 auto 20px' }}>
+            Zed bukan sekadar AI tutor. Dia memahami bila anda penat, malas, atau stress — dan tetap ada untuk anda. 24/7. Tak pernah marah.
+          </p>
+          
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '24px' }}>
+            <span style={{ color: '#00d4ff', fontSize: '18px' }}>✦</span>
+            <p style={{ fontSize: '14px', color: '#00d4ff', fontWeight: 700, margin: 0 }}>
+              Belajar SPM • Dapat duit balik • Tabung masa depan
+            </p>
+          </div>
+
+          {/* SS2: Side-by-Side Buttons */}
+          <div className="hero-btns" style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginBottom: '40px' }}>
+            <button className="btn-hover" onClick={() => router.push('/register')} style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', border: 'none', color: '#fff', padding: '16px 32px', borderRadius: '12px', fontSize: '15px', fontWeight: 800, cursor: 'pointer', boxShadow: '0 10px 20px rgba(0,212,255,0.2)' }}>
+              Daftar Sekarang →
+            </button>
+            <button className="btn-hover" onClick={() => document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' })} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '16px 32px', borderRadius: '12px', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}>
+              Tengok Harga
+            </button>
+          </div>
+
+          {/* Compact Stats */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '32px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '24px' }}>
+            {[
+              { n: '10,000', l: 'SLOTS PENGASAS' },
+              { n: 'RM5', l: 'KREDIT/SUBJEK' },
+              { n: '24/7', l: 'ZED SEDIA' }
+            ].map((s, i) => (
+              <div key={i}>
+                <div style={{ fontSize: '20px', fontWeight: 900 }}>{s.n}</div>
+                <div style={{ fontSize: '9px', color: '#71717a', fontWeight: 800, letterSpacing: '1px' }}>{s.l}</div>
               </div>
-              <div style={{ fontSize: '14px', color: colors.textMuted, marginBottom: '8px', fontWeight: 600 }}>Harga per subjek</div>
-              <div style={{ fontSize: '64px', fontWeight: 900, color: '#fff', lineHeight: 1, marginBottom: '4px', letterSpacing: '-3px' }}>RM19.99</div>
-              <div style={{ fontSize: '15px', color: colors.primary, marginBottom: '4px', fontWeight: 800 }}>/bulan • Early Bird</div>
-              <div style={{ fontSize: '14px', color: '#444', textDecoration: 'line-through', marginBottom: '32px', fontWeight: 600 }}>Harga biasa RM29.99/bulan</div>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '40px', textAlign: 'left' }}>
-                {[
-                  '✓ Pilih 1 subjek — Math, Add Math, Science, Biology, Physics atau Chemistry',
-                  '✓ Zed BFF 24/7 — sabar, tak pernah marah',
-                  '✓ Silibus KSSM Form 4 & Form 5',
-                  '✓ SPM Past Year Checker',
-                  '✓ Zed Fund RM5/subjek/rujukan',
-                  '✓ Tambah subjek lain bila-bila masa'
-                ].map((f, i) => (
-                  <div key={i} style={{ fontSize: '14px', color: colors.textMuted, display: 'flex', gap: '12px', lineHeight: 1.4 }}>
-                    <span style={{ color: colors.primary, fontWeight: 900 }}>✓</span> <span>{f.replace('✓ ', '')}</span>
-                  </div>
-                ))}
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS - REDUCED GAPS */}
+      <section style={{ padding: '40px 20px' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+            <div style={{ fontSize: '11px', color: '#00d4ff', fontWeight: 800, letterSpacing: '3px', marginBottom: '8px' }}>MACAM MANA ZED WORKS</div>
+            <h2 style={{ fontSize: '32px', fontWeight: 900, letterSpacing: '-1px' }}>Simple je. <span style={{ color: '#7c3aed' }}>4 langkah.</span></h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
+            {[
+              { s: '01', i: '📝', t: 'Daftar', d: 'Pilih 1 subjek pada RM19.99/bulan. Isi nama, mobile, dan nombor WhatsApp ibu atau ayah.' },
+              { s: '02', i: '📱', t: 'Parent Approve', d: 'Zed hantar WhatsApp ke parent anda. Dia buka link, baca pasal Zed, dan bayar.' },
+              { s: '03', i: '🧠', t: 'Mula Belajar', d: 'Akaun terus aktif. Login dan mula chat dengan Zed untuk subjek anda.' },
+              { s: '04', i: '💰', t: 'Refer & Earn', d: 'Share referral code anda. Setiap subjek kawan subscribe — anda dapat RM5 sebulan.' }
+            ].map((item, i) => (
+              <div key={i} style={{ ...glassStyle, padding: '24px', borderRadius: '20px' }}>
+                <div style={{ fontSize: '32px', fontWeight: 900, color: 'rgba(255,255,255,0.03)', position: 'absolute', top: '10px', right: '15px' }}>{item.s}</div>
+                <div style={{ fontSize: '28px', marginBottom: '12px' }}>{item.i}</div>
+                <h3 style={{ fontSize: '17px', fontWeight: 700, marginBottom: '8px' }}>{item.t}</h3>
+                <p style={{ fontSize: '13px', color: '#a1a1aa', lineHeight: 1.4 }}>{item.d}</p>
               </div>
-              
-              <button onClick={() => router.push('/register')} style={{ width: '100%', background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`, border: 'none', color: '#fff', padding: '20px', borderRadius: '16px', fontSize: '16px', fontWeight: 800, cursor: 'pointer', boxShadow: `0 10px 30px ${colors.primary}20` }}>
-                Cuba Zed Percuma →
-              </button>
-              <p style={{ fontSize: '12px', color: '#555', marginTop: '18px', fontWeight: 600 }}>5 mesej percuma. Tiada kad kredit diperlukan.</p>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SS3: ZED FUND - TIGHTENED & REFORMATTED */}
+      <section style={{ padding: '60px 20px', background: 'linear-gradient(to bottom, #050508, #0d0525, #050508)' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+          {/* SS3: Pushed up to cover unused space */}
+          <div style={{ fontSize: '48px', marginBottom: '10px' }}>💰</div>
+          <div style={{ fontSize: '11px', color: '#7c3aed', fontWeight: 800, letterSpacing: '3px', marginBottom: '16px' }}>ZED FUND — TIADA TANDINGAN DI DUNIA</div>
+          
+          {/* SS3: Center aligned, separate lines, world-class typography */}
+          <h2 style={{ fontSize: 'clamp(28px, 8vw, 48px)', fontWeight: 900, lineHeight: 1.1, letterSpacing: '-2px', marginBottom: '24px' }}>
+            Belajar SPM.<br />
+            <span style={{ background: 'linear-gradient(135deg, #ff2d78, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Dapat Duit Balik.</span><br />
+            Tabung Masa Depan.
+          </h2>
+
+          <p style={{ fontSize: '15px', color: '#a1a1aa', lineHeight: 1.6, marginBottom: '32px' }}>
+            Refer kawan subscribe 3 subjek = RM15 sebulan masuk akaun anda. Dalam setahun, boleh ada RM180+ dalam Zed Fund. Lepas SPM — guna untuk yuran kolej, laptop, lesen memandu.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+            {[
+              { l: 'Per Subjek', c: 'RM5', clr: '#00d4ff' },
+              { l: '3 Subjek', c: 'RM15', clr: '#7c3aed' },
+              { l: '10 Kawan', c: 'RM150', clr: '#ff2d78' }
+            ].map((item, i) => (
+              <div key={i} style={{ ...glassStyle, borderRadius: '12px', padding: '16px 8px' }}>
+                <div style={{ fontSize: '10px', color: '#71717a', fontWeight: 700, marginBottom: '4px' }}>{item.l}</div>
+                <div style={{ fontSize: '16px', fontWeight: 900, color: item.clr }}>{item.c}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SS4: PRICING - REMOVED TOP SPACE, REDUCED FONT */}
+      <section id="pricing" style={{ padding: '40px 20px 80px' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center' }}>
+          {/* SS4: Pushed up */}
+          <div style={{ fontSize: '11px', color: '#00d4ff', fontWeight: 800, letterSpacing: '3px', marginBottom: '12px' }}>HARGA PENGASAS — 10,000 SLOT SAHAJA</div>
+          <h2 style={{ fontSize: '28px', fontWeight: 900, marginBottom: '30px', letterSpacing: '-1px' }}>
+            Tuisyen 1 subjek = RM100+/bulan. <span style={{ color: '#00d4ff' }}>Zed?</span>
+          </h2>
+          
+          <div style={{ maxWidth: '400px', margin: '0 auto', ...glassStyle, borderRadius: '24px', padding: '40px 24px', position: 'relative', border: '1px solid rgba(0,212,255,0.3)' }}>
+            <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', padding: '4px 16px', borderRadius: '100px', fontSize: '10px', fontWeight: 900, whiteSpace: 'nowrap' }}>
+              🎯 EARLY BIRD SPECIAL
             </div>
+            <div style={{ fontSize: '13px', color: '#71717a', fontWeight: 600 }}>Harga per subjek</div>
+            
+            {/* SS4: Reduced font size from 64px to 48px */}
+            <div style={{ fontSize: '48px', fontWeight: 900, color: '#fff', lineHeight: 1, margin: '8px 0 4px' }}>RM19.99</div>
+            
+            <div style={{ fontSize: '14px', color: '#00d4ff', fontWeight: 700, marginBottom: '4px' }}>/bulan • Early Bird</div>
+            <div style={{ fontSize: '12px', color: '#444', textDecoration: 'line-through', marginBottom: '24px', fontWeight: 700 }}>Harga biasa RM29.99/bulan</div>
+            
+            <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '30px' }}>
+              {[
+                '✓ Math, Add Math, Science, Bio, Physics, Chem',
+                '✓ Zed BFF 24/7 — Sabar & Tak Marah',
+                '✓ Silibus KSSM Form 4 & Form 5',
+                '✓ SPM Past Year Checker',
+                '✓ Zed Fund RM5/subjek/rujukan'
+              ].map((f, i) => (
+                <div key={i} style={{ fontSize: '13px', color: '#a1a1aa', display: 'flex', gap: '8px' }}>
+                  <span style={{ color: '#00d4ff' }}>✓</span> {f.replace('✓ ', '')}
+                </div>
+              ))}
+            </div>
+            
+            <button onClick={() => router.push('/register')} style={{ width: '100%', background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', border: 'none', color: '#fff', padding: '16px', borderRadius: '12px', fontSize: '15px', fontWeight: 800, cursor: 'pointer' }}>
+              Cuba Zed Percuma →
+            </button>
+            <p style={{ fontSize: '11px', color: '#555', marginTop: '12px' }}>5 mesej percuma. Tiada kad kredit diperlukan.</p>
           </div>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer style={{ padding: '64px 24px', borderTop: `1px solid ${colors.border}`, textAlign: 'center', background: '#010101' }}>
-        <div style={{ fontSize: '28px', fontWeight: 900, letterSpacing: '-1.5px', background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '16px' }}>ZED</div>
-        <p style={{ fontSize: '14px', color: colors.textMuted, marginBottom: '8px', maxWidth: '400px', margin: '0 auto 12px', lineHeight: 1.6 }}>Malaysia's First AI Educational BFF untuk pelajar SPM.</p>
-        <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.2)', fontWeight: 500 }}>© 2026 Zed. All rights reserved.</p>
+      <footer style={{ padding: '40px 20px', borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
+        <div style={{ fontSize: '20px', fontWeight: 900, color: '#00d4ff', marginBottom: '8px' }}>ZED</div>
+        <p style={{ fontSize: '12px', color: '#71717a' }}>© 2026 Zed. All rights reserved.</p>
       </footer>
 
     </main>
