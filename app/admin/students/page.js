@@ -3,6 +3,20 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
+const glass = {
+  background: 'rgba(255,255,255,0.03)',
+  backdropFilter: 'blur(12px)',
+  border: '1px solid rgba(255,255,255,0.08)',
+};
+
+const statusColor = {
+  ACTIVE: '#10b981',
+  TRIAL: '#00d4ff',
+  PENDING: '#f59e0b',
+  SUSPENDED: '#ff2d78',
+  EXPIRED: '#52525b'
+};
+
 export default function AdminStudents() {
   const router = useRouter();
   const [students, setStudents] = useState([]);
@@ -39,40 +53,46 @@ export default function AdminStudents() {
   const handleAction = async (studentId, action) => {
     const token = localStorage.getItem('zed_admin_token');
     try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/admin/students/${studentId}/${action}`;
-      await axios.put(url, {}, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/students/${studentId}/${action}`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       fetchStudents(token);
     } catch (err) {
       alert('Tindakan gagal.');
     }
   };
 
-  const statusColor = { ACTIVE: '#10b981', PENDING: '#f59e0b', SUSPENDED: '#ff2d78', EXPIRED: '#94a3b8' };
-
   return (
-    <main style={{ background: '#070714', minHeight: '100vh', color: '#fff', fontFamily: 'Inter, sans-serif' }}>
+    <main style={{ background: '#050508', minHeight: '100vh', color: '#fff', fontFamily: 'Inter, sans-serif' }}>
 
-      <nav style={{ padding: '16px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(7,7,20,0.95)', borderBottom: '1px solid rgba(0,212,255,0.1)', backdropFilter: 'blur(12px)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button onClick={() => router.push('/admin/dashboard')} style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '20px' }}>←</button>
-          <div style={{ fontSize: '18px', fontWeight: 900, background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Pengurusan Pelajar</div>
+      <style jsx global>{`
+        input::placeholder { color: #52525b; }
+        input:focus { border-color: rgba(0,212,255,0.3) !important; outline: none; }
+        select option { background: #0a0a12; color: #fff; }
+      `}</style>
+
+      {/* Nav */}
+      <nav style={{ padding: '10px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(5,5,8,0.95)', borderBottom: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(12px)', position: 'sticky', top: 0, zIndex: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <button onClick={() => router.push('/admin/dashboard')} style={{ background: 'transparent', border: 'none', color: '#71717a', cursor: 'pointer', fontSize: '18px' }}>←</button>
+          <div style={{ fontSize: '16px', fontWeight: 900, background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.5px' }}>Pengurusan Pelajar</div>
         </div>
-        <div style={{ fontSize: '14px', color: '#94a3b8' }}>Jumlah: {total}</div>
+        <div style={{ fontSize: '11px', color: '#71717a', fontWeight: 700 }}>Jumlah: {total}</div>
       </nav>
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px' }}>
+      <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '20px 16px' }}>
 
         {/* Filters */}
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '24px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && fetchStudents()}
             placeholder="Cari nama atau mobile..."
-            style={{ flex: 1, minWidth: '200px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '12px 16px', color: '#fff', fontSize: '14px', outline: 'none' }}
+            style={{ flex: 1, minWidth: '180px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '8px', padding: '8px 12px', color: '#fff', fontSize: '12px', fontFamily: 'Inter, sans-serif' }}
           />
-          {['', 'ACTIVE', 'PENDING', 'SUSPENDED', 'EXPIRED'].map(s => (
-            <button key={s} onClick={() => setStatusFilter(s)} style={{ background: statusFilter === s ? 'rgba(0,212,255,0.15)' : 'rgba(255,255,255,0.03)', border: `1px solid ${statusFilter === s ? 'rgba(0,212,255,0.4)' : 'rgba(255,255,255,0.1)'}`, color: statusFilter === s ? '#00d4ff' : '#94a3b8', padding: '10px 16px', borderRadius: '10px', fontSize: '13px', cursor: 'pointer', fontWeight: 600 }}>
+          {['', 'ACTIVE', 'TRIAL', 'PENDING', 'SUSPENDED', 'EXPIRED'].map(s => (
+            <button key={s} onClick={() => setStatusFilter(s)} style={{ background: statusFilter === s ? 'rgba(0,212,255,0.08)' : 'rgba(255,255,255,0.03)', border: `1px solid ${statusFilter === s ? 'rgba(0,212,255,0.25)' : 'rgba(255,255,255,0.08)'}`, color: statusFilter === s ? '#00d4ff' : '#71717a', padding: '8px 12px', borderRadius: '8px', fontSize: '11px', cursor: 'pointer', fontWeight: statusFilter === s ? 800 : 400, fontFamily: 'Inter, sans-serif' }}>
               {s || 'Semua'}
             </button>
           ))}
@@ -80,47 +100,49 @@ export default function AdminStudents() {
 
         {/* Table */}
         {loading ? (
-          <div style={{ textAlign: 'center', color: '#94a3b8', padding: '40px' }}>Loading...</div>
+          <div style={{ textAlign: 'center', color: '#71717a', padding: '40px', fontSize: '13px' }}>Loading...</div>
         ) : (
-          <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', overflow: 'hidden' }}>
+          <div style={{ ...glass, borderRadius: '14px', overflow: 'hidden' }}>
             {/* Header */}
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', padding: '16px 20px', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid rgba(255,255,255,0.06)', fontSize: '12px', color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase' }}>
-              <div>Pelajar</div>
-              <div>Plan</div>
-              <div>Status</div>
-              <div>First Adopter</div>
-              <div>Tindakan</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.5fr 1fr 1fr 1fr', padding: '10px 16px', background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid rgba(255,255,255,0.06)', fontSize: '9px', color: '#52525b', fontWeight: 800, letterSpacing: '0.5px' }}>
+              <div>PELAJAR</div>
+              <div>SUBJEK</div>
+              <div>STATUS</div>
+              <div>ADOPTER</div>
+              <div>TINDAKAN</div>
             </div>
 
             {students.length === 0 ? (
-              <div style={{ padding: '40px', textAlign: 'center', color: '#94a3b8' }}>Tiada pelajar dijumpai.</div>
+              <div style={{ padding: '40px', textAlign: 'center', color: '#71717a', fontSize: '13px' }}>Tiada pelajar dijumpai.</div>
             ) : (
               students.map((s, i) => (
-                <div key={s.id} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', padding: '16px 20px', borderBottom: i < students.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none', alignItems: 'center' }}>
+                <div key={s.id} style={{ display: 'grid', gridTemplateColumns: '2fr 1.5fr 1fr 1fr 1fr', padding: '12px 16px', borderBottom: i < students.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none', alignItems: 'center', gap: '8px' }}>
                   <div>
-                    <div style={{ fontSize: '14px', fontWeight: 600, color: '#fff' }}>{s.name}</div>
-                    <div style={{ fontSize: '12px', color: '#94a3b8' }}>{s.mobile}</div>
-                    <div style={{ fontSize: '11px', color: '#94a3b8' }}>Parent: {s.parent?.name}</div>
+                    <div style={{ fontSize: '12px', fontWeight: 800, color: '#fff', marginBottom: '2px' }}>{s.name}</div>
+                    <div style={{ fontSize: '10px', color: '#71717a' }}>{s.mobile}</div>
+                    <div style={{ fontSize: '10px', color: '#52525b' }}>Parent: {s.parent?.name}</div>
                   </div>
-                  <div style={{ fontSize: '13px', color: '#94a3b8' }}>
-                    {s.subscription?.tier === 'FIVE_SUBJECTS' ? '5 Subjek' : s.subscription?.tier === 'THREE_SUBJECTS' ? '3 Subjek' : '—'}
+                  <div style={{ fontSize: '10px', color: '#a1a1aa' }}>
+                    {s.subscriptions?.length > 0
+                      ? s.subscriptions.map(sub => sub.subject).join(', ')
+                      : '—'}
                   </div>
                   <div>
-                    <span style={{ background: `${statusColor[s.status]}15`, border: `1px solid ${statusColor[s.status]}30`, color: statusColor[s.status], padding: '4px 10px', borderRadius: '50px', fontSize: '11px', fontWeight: 700 }}>
+                    <span style={{ background: `${statusColor[s.status] || '#52525b'}12`, border: `1px solid ${statusColor[s.status] || '#52525b'}25`, color: statusColor[s.status] || '#52525b', padding: '3px 8px', borderRadius: '100px', fontSize: '9px', fontWeight: 800, letterSpacing: '0.3px' }}>
                       {s.status}
                     </span>
                   </div>
-                  <div style={{ fontSize: '13px', color: s.isFirstAdopter ? '#00d4ff' : '#94a3b8' }}>
+                  <div style={{ fontSize: '11px', color: s.isFirstAdopter ? '#00d4ff' : '#52525b', fontWeight: s.isFirstAdopter ? 800 : 400 }}>
                     {s.isFirstAdopter ? '⭐ Ya' : '—'}
                   </div>
-                  <div style={{ display: 'flex', gap: '8px' }}>
+                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                     {s.status === 'ACTIVE' && (
-                      <button onClick={() => handleAction(s.id, 'suspend')} style={{ background: 'rgba(255,45,120,0.1)', border: '1px solid rgba(255,45,120,0.2)', color: '#ff2d78', padding: '6px 10px', borderRadius: '8px', fontSize: '11px', cursor: 'pointer', fontWeight: 600 }}>
+                      <button onClick={() => handleAction(s.id, 'suspend')} style={{ background: 'rgba(255,45,120,0.06)', border: '1px solid rgba(255,45,120,0.15)', color: '#ff2d78', padding: '4px 8px', borderRadius: '6px', fontSize: '10px', cursor: 'pointer', fontWeight: 700, fontFamily: 'Inter, sans-serif' }}>
                         Gantung
                       </button>
                     )}
-                    {(s.status === 'PENDING' || s.status === 'SUSPENDED') && (
-                      <button onClick={() => handleAction(s.id, 'activate')} style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)', color: '#10b981', padding: '6px 10px', borderRadius: '8px', fontSize: '11px', cursor: 'pointer', fontWeight: 600 }}>
+                    {(s.status === 'PENDING' || s.status === 'SUSPENDED' || s.status === 'TRIAL') && (
+                      <button onClick={() => handleAction(s.id, 'activate')} style={{ background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.15)', color: '#10b981', padding: '4px 8px', borderRadius: '6px', fontSize: '10px', cursor: 'pointer', fontWeight: 700, fontFamily: 'Inter, sans-serif' }}>
                         Aktifkan
                       </button>
                     )}
@@ -133,10 +155,10 @@ export default function AdminStudents() {
 
         {/* Pagination */}
         {total > 20 && (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: '24px' }}>
-            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer' }}>← Prev</button>
-            <span style={{ padding: '8px 16px', color: '#94a3b8', fontSize: '14px' }}>Halaman {page}</span>
-            <button onClick={() => setPage(p => p + 1)} disabled={page * 20 >= total} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer' }}>Next →</button>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '20px' }}>
+            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} style={{ ...glass, color: '#a1a1aa', padding: '7px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontFamily: 'Inter, sans-serif', border: '1px solid rgba(255,255,255,0.08)' }}>← Prev</button>
+            <span style={{ padding: '7px 14px', color: '#71717a', fontSize: '12px' }}>Halaman {page}</span>
+            <button onClick={() => setPage(p => p + 1)} disabled={page * 20 >= total} style={{ ...glass, color: '#a1a1aa', padding: '7px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontFamily: 'Inter, sans-serif', border: '1px solid rgba(255,255,255,0.08)' }}>Next →</button>
           </div>
         )}
       </div>

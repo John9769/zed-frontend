@@ -3,6 +3,33 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
+const glass = {
+  background: 'rgba(255,255,255,0.03)',
+  backdropFilter: 'blur(12px)',
+  border: '1px solid rgba(255,255,255,0.08)',
+};
+
+const inputStyle = {
+  width: '100%',
+  background: 'rgba(255,255,255,0.04)',
+  border: '1px solid rgba(255,255,255,0.08)',
+  borderRadius: '10px',
+  padding: '10px 14px',
+  color: '#fff',
+  fontSize: '13px',
+  outline: 'none',
+  fontFamily: 'Inter, sans-serif'
+};
+
+const labelStyle = {
+  fontSize: '10px',
+  color: '#71717a',
+  marginBottom: '6px',
+  display: 'block',
+  fontWeight: 800,
+  letterSpacing: '0.5px'
+};
+
 export default function AdminLogin() {
   const router = useRouter();
   const [form, setForm] = useState({ email: '', password: '' });
@@ -29,45 +56,40 @@ export default function AdminLogin() {
     }
   };
 
-  const inputStyle = {
-    width: '100%',
-    background: 'rgba(255,255,255,0.05)',
-    border: '1px solid rgba(255,255,255,0.1)',
-    borderRadius: '12px',
-    padding: '14px 16px',
-    color: '#fff',
-    fontSize: '15px',
-    outline: 'none'
-  };
-
   return (
-    <main style={{ background: '#070714', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px', fontFamily: 'Inter, sans-serif' }}>
-      <div style={{ width: '100%', maxWidth: '400px' }}>
+    <main style={{ background: '#050508', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: 'Inter, sans-serif' }}>
 
-        <div style={{ fontSize: '28px', fontWeight: 900, background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '8px' }}>ZED</div>
-        <div style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '32px' }}>Admin Panel</div>
+      <style jsx global>{`
+        input::placeholder { color: #52525b; }
+        input:focus { border-color: rgba(0,212,255,0.3) !important; }
+      `}</style>
 
-        <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '24px', padding: '40px 32px' }}>
-          <h1 style={{ fontSize: '22px', fontWeight: 900, marginBottom: '32px', color: '#fff' }}>Admin Login</h1>
+      <div style={{ width: '100%', maxWidth: '360px' }}>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={{ fontSize: '22px', fontWeight: 900, background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '4px', letterSpacing: '-0.5px' }}>ZED</div>
+        <div style={{ fontSize: '11px', color: '#71717a', marginBottom: '20px', fontWeight: 700 }}>Admin Panel</div>
+
+        <div style={{ ...glass, borderRadius: '16px', padding: '24px' }}>
+          <h1 style={{ fontSize: '18px', fontWeight: 900, marginBottom: '20px', color: '#fff', letterSpacing: '-0.5px' }}>Admin Login</h1>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <div>
-              <label style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '8px', display: 'block', fontWeight: 600 }}>Email</label>
+              <label style={labelStyle}>EMAIL</label>
               <input name="email" value={form.email} onChange={handle} placeholder="admin@zed.my" style={inputStyle} onKeyDown={e => e.key === 'Enter' && handleLogin()} />
             </div>
             <div>
-              <label style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '8px', display: 'block', fontWeight: 600 }}>Password</label>
+              <label style={labelStyle}>PASSWORD</label>
               <input name="password" value={form.password} onChange={handle} placeholder="Password" type="password" style={inputStyle} onKeyDown={e => e.key === 'Enter' && handleLogin()} />
             </div>
           </div>
 
           {error && (
-            <div style={{ background: 'rgba(255,45,120,0.1)', border: '1px solid rgba(255,45,120,0.3)', borderRadius: '12px', padding: '12px', marginTop: '20px' }}>
-              <p style={{ color: '#ff2d78', fontSize: '13px' }}>{error}</p>
+            <div style={{ background: 'rgba(255,45,120,0.06)', border: '1px solid rgba(255,45,120,0.15)', borderRadius: '8px', padding: '10px 12px', marginTop: '14px' }}>
+              <p style={{ color: '#ff2d78', fontSize: '12px' }}>{error}</p>
             </div>
           )}
 
-          <button onClick={handleLogin} disabled={loading} style={{ width: '100%', marginTop: '32px', background: loading ? 'rgba(0,212,255,0.3)' : 'linear-gradient(135deg, #00d4ff, #7c3aed)', border: 'none', color: '#fff', padding: '14px', borderRadius: '12px', fontSize: '15px', fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer' }}>
+          <button onClick={handleLogin} disabled={loading} style={{ width: '100%', marginTop: '20px', background: loading ? 'rgba(0,212,255,0.2)' : 'linear-gradient(135deg, #00d4ff, #7c3aed)', border: 'none', color: '#fff', padding: '12px', borderRadius: '10px', fontSize: '13px', fontWeight: 800, cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'Inter, sans-serif' }}>
             {loading ? 'Loading...' : 'Login →'}
           </button>
         </div>

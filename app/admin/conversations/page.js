@@ -4,26 +4,33 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 const SUBJECT_COLORS = {
-  MATH: '#3b82f6',
+  MATH: '#ff2d78',
+  ADD_MATH: '#00d4ff',
   SCIENCE: '#10b981',
-  BM: '#f59e0b',
-  ENGLISH: '#8b5cf6',
-  SEJARAH: '#ef4444'
+  BIOLOGY: '#84cc16',
+  PHYSICS: '#f59e0b',
+  CHEMISTRY: '#a78bfa'
 };
 
 const STATUS_COLORS = {
   ACTIVE: '#10b981',
   TRIAL: '#f59e0b',
-  PENDING: '#94a3b8',
-  SUSPENDED: '#ef4444',
-  EXPIRED: '#64748b'
+  PENDING: '#a1a1aa',
+  SUSPENDED: '#ff2d78',
+  EXPIRED: '#52525b'
+};
+
+const glass = {
+  background: 'rgba(255,255,255,0.03)',
+  backdropFilter: 'blur(12px)',
+  border: '1px solid rgba(255,255,255,0.08)',
 };
 
 export default function AdminConversations() {
   const router = useRouter();
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState({ subject: '', studentId: '' });
+  const [filter, setFilter] = useState({ subject: '' });
   const [pagination, setPagination] = useState({ total: 0, page: 1, totalPages: 1 });
 
   useEffect(() => {
@@ -38,7 +45,6 @@ export default function AdminConversations() {
       const token = localStorage.getItem('zed_admin_token');
       const params = new URLSearchParams({ page, limit: 20 });
       if (filter.subject) params.append('subject', filter.subject);
-
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/api/admin/conversations?${params}`,
         { headers: { Authorization: `Bearer ${token}` } }
@@ -54,91 +60,92 @@ export default function AdminConversations() {
 
   const formatDate = (d) => new Date(d).toLocaleString('en-MY', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
-  const navStyle = { display: 'flex', gap: '8px' };
-  const navBtn = (label, path) => (
-    <button onClick={() => router.push(path)} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8', padding: '8px 16px', borderRadius: '8px', fontSize: '13px', cursor: 'pointer' }}>
-      {label}
-    </button>
-  );
-
   return (
-    <main style={{ background: '#070714', minHeight: '100vh', fontFamily: 'Inter, sans-serif', color: '#fff' }}>
+    <main style={{ background: '#050508', minHeight: '100vh', fontFamily: 'Inter, sans-serif', color: '#fff' }}>
+
+      <style jsx global>{`
+        select option { background: #0a0a12; color: #fff; }
+      `}</style>
 
       {/* Header */}
-      <div style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '16px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ fontSize: '18px', fontWeight: 900, background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          ZED Admin
-        </div>
-        <div style={navStyle}>
-          {navBtn('Dashboard', '/admin/dashboard')}
-          {navBtn('Pelajar', '/admin/students')}
-          {navBtn('Kandungan RAG', '/admin/content')}
-          <button style={{ background: 'linear-gradient(135deg, #00d4ff22, #7c3aed22)', border: '1px solid #7c3aed55', color: '#a78bfa', padding: '8px 16px', borderRadius: '8px', fontSize: '13px', cursor: 'pointer', fontWeight: 700 }}>
+      <div style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '10px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(5,5,8,0.95)', backdropFilter: 'blur(12px)', position: 'sticky', top: 0, zIndex: 10 }}>
+        <div style={{ fontSize: '18px', fontWeight: 900, background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.5px' }}>ZED Admin</div>
+        <div style={{ display: 'flex', gap: '6px' }}>
+          {[
+            { label: 'Dashboard', path: '/admin/dashboard' },
+            { label: 'Pelajar', path: '/admin/students' },
+            { label: 'RAG', path: '/admin/content' },
+          ].map(btn => (
+            <button key={btn.path} onClick={() => router.push(btn.path)} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#71717a', padding: '6px 12px', borderRadius: '8px', fontSize: '11px', cursor: 'pointer', fontFamily: 'Inter, sans-serif' }}>
+              {btn.label}
+            </button>
+          ))}
+          <button style={{ background: 'rgba(124,58,237,0.08)', border: '1px solid rgba(124,58,237,0.2)', color: '#a78bfa', padding: '6px 12px', borderRadius: '8px', fontSize: '11px', fontWeight: 800, cursor: 'pointer' }}>
             Perbualan
           </button>
         </div>
       </div>
 
-      <div style={{ padding: '32px' }}>
+      <div style={{ padding: '20px 16px', maxWidth: '900px', margin: '0 auto' }}>
 
         {/* Title + Filter */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
           <div>
-            <h1 style={{ fontSize: '24px', fontWeight: 900, marginBottom: '4px' }}>Perbualan Pelajar</h1>
-            <p style={{ color: '#94a3b8', fontSize: '13px' }}>{pagination.total} sesi dijumpai</p>
+            <h1 style={{ fontSize: '18px', fontWeight: 900, marginBottom: '2px', letterSpacing: '-0.5px' }}>Perbualan Pelajar</h1>
+            <p style={{ color: '#71717a', fontSize: '11px' }}>{pagination.total} sesi dijumpai</p>
           </div>
           <select
             value={filter.subject}
-            onChange={(e) => setFilter({ ...filter, subject: e.target.value })}
-            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '10px 16px', borderRadius: '10px', fontSize: '13px', cursor: 'pointer' }}
+            onChange={(e) => { setFilter({ ...filter, subject: e.target.value }); fetchSessions(1); }}
+            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#fff', padding: '8px 12px', borderRadius: '8px', fontSize: '12px', cursor: 'pointer', fontFamily: 'Inter, sans-serif' }}
           >
             <option value="">Semua Subjek</option>
             <option value="MATH">Math</option>
+            <option value="ADD_MATH">Add Math</option>
             <option value="SCIENCE">Science</option>
-            <option value="BM">BM</option>
-            <option value="ENGLISH">English</option>
-            <option value="SEJARAH">Sejarah</option>
+            <option value="BIOLOGY">Biology</option>
+            <option value="PHYSICS">Physics</option>
+            <option value="CHEMISTRY">Chemistry</option>
           </select>
         </div>
 
         {/* Sessions List */}
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '80px', color: '#94a3b8' }}>Memuatkan...</div>
+          <div style={{ textAlign: 'center', padding: '60px', color: '#71717a', fontSize: '13px' }}>Memuatkan...</div>
         ) : sessions.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '80px', color: '#94a3b8' }}>Tiada perbualan dijumpai.</div>
+          <div style={{ textAlign: 'center', padding: '60px', color: '#71717a', fontSize: '13px' }}>Tiada perbualan dijumpai.</div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {sessions.map((s) => (
               <div
                 key={s.id}
                 onClick={() => router.push(`/admin/conversations/${s.id}`)}
-                style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '16px', padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', transition: 'border-color 0.2s' }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.4)'}
-                onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'}
+                style={{ ...glass, borderRadius: '12px', padding: '14px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', transition: 'border-color 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.3)'}
+                onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                  {/* Subject Badge */}
-                  <div style={{ background: `${SUBJECT_COLORS[s.subject]}22`, border: `1px solid ${SUBJECT_COLORS[s.subject]}44`, borderRadius: '10px', padding: '8px 14px', fontSize: '12px', fontWeight: 700, color: SUBJECT_COLORS[s.subject], minWidth: '80px', textAlign: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{ background: `${SUBJECT_COLORS[s.subject] || '#7c3aed'}12`, border: `1px solid ${SUBJECT_COLORS[s.subject] || '#7c3aed'}25`, borderRadius: '8px', padding: '5px 10px', fontSize: '10px', fontWeight: 800, color: SUBJECT_COLORS[s.subject] || '#7c3aed', letterSpacing: '0.5px' }}>
                     {s.subject}
                   </div>
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: '15px', marginBottom: '4px' }}>{s.student?.name || 'Unknown'}</div>
-                    <div style={{ fontSize: '12px', color: '#64748b' }}>{s.student?.mobile}</div>
+                    <div style={{ fontWeight: 800, fontSize: '13px', marginBottom: '2px', letterSpacing: '-0.3px' }}>{s.student?.name || 'Unknown'}</div>
+                    <div style={{ fontSize: '11px', color: '#52525b' }}>{s.student?.mobile}</div>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                   <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: '20px', fontWeight: 900, color: '#00d4ff' }}>{s._count.messages}</div>
-                    <div style={{ fontSize: '11px', color: '#64748b' }}>mesej</div>
+                    <div style={{ fontSize: '16px', fontWeight: 900, color: '#00d4ff' }}>{s._count.messages}</div>
+                    <div style={{ fontSize: '10px', color: '#52525b' }}>mesej</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '4px' }}>{formatDate(s.updatedAt)}</div>
-                    <div style={{ fontSize: '11px', padding: '3px 10px', borderRadius: '20px', background: `${STATUS_COLORS[s.student?.status]}22`, color: STATUS_COLORS[s.student?.status], display: 'inline-block' }}>
+                    <div style={{ fontSize: '10px', color: '#71717a', marginBottom: '4px' }}>{formatDate(s.updatedAt)}</div>
+                    <div style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '100px', background: `${STATUS_COLORS[s.student?.status]}15`, color: STATUS_COLORS[s.student?.status], display: 'inline-block', fontWeight: 800 }}>
                       {s.student?.status}
                     </div>
                   </div>
-                  <div style={{ color: '#94a3b8', fontSize: '18px' }}>›</div>
+                  <div style={{ color: '#52525b', fontSize: '16px' }}>›</div>
                 </div>
               </div>
             ))}
@@ -147,9 +154,9 @@ export default function AdminConversations() {
 
         {/* Pagination */}
         {pagination.totalPages > 1 && (
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '32px' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '6px', marginTop: '24px' }}>
             {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(p => (
-              <button key={p} onClick={() => fetchSessions(p)} style={{ background: p === pagination.page ? 'linear-gradient(135deg, #00d4ff, #7c3aed)' : 'rgba(255,255,255,0.05)', border: 'none', color: '#fff', width: '36px', height: '36px', borderRadius: '8px', cursor: 'pointer', fontWeight: p === pagination.page ? 700 : 400 }}>
+              <button key={p} onClick={() => fetchSessions(p)} style={{ background: p === pagination.page ? 'linear-gradient(135deg, #00d4ff, #7c3aed)' : 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#fff', width: '32px', height: '32px', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: p === pagination.page ? 800 : 400, fontFamily: 'Inter, sans-serif' }}>
                 {p}
               </button>
             ))}
