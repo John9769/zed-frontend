@@ -67,7 +67,7 @@ export default function LoginPage() {
       `}</style>
 
       <div style={{ width: '100%', maxWidth: '400px' }}>
-        <button onClick={() => router.push('/')} style={{ background: 'transparent', border: 'none', color: '#71717a', fontSize: '12px', cursor: 'pointer', marginBottom: '12px', fontFamily: 'Inter, sans-serif' }}>← Kembali</button>
+        <button onClick={() => router.push('/')} style={{ background: 'transparent', border: 'none', color: '#71717a', fontSize: '12px', cursor: 'pointer', marginBottom: '12px', fontFamily: 'Inter, sans-serif', display: 'block' }}>← Kembali</button>
 
         {/* Logo */}
         <div onClick={() => router.push('/')} style={{ fontSize: '22px', fontWeight: 900, background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '20px', cursor: 'pointer', display: 'inline-block' }}>
