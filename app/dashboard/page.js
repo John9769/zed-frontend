@@ -33,7 +33,7 @@ export default function Dashboard() {
   const logout = () => {
     localStorage.removeItem('zed_token');
     localStorage.removeItem('zed_student');
-    router.push('/login');
+    router.push('/');
   };
 
   const isTrial = student?.status === 'TRIAL';
