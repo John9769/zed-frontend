@@ -21,18 +21,22 @@ export default function ZedChat() {
   const fileInputRef = useRef(null);
 
   const subjectLabels = {
-    BM: 'Bahasa Melayu',
-    ENGLISH: 'English',
     MATH: 'Mathematics',
+    ADD_MATH: 'Additional Mathematics',
     SCIENCE: 'Science',
+    BIOLOGY: 'Biology',
+    PHYSICS: 'Physics',
+    CHEMISTRY: 'Chemistry',
     SEJARAH: 'Sejarah'
   };
 
   const subjectColors = {
-    BM: '#00d4ff',
-    ENGLISH: '#7c3aed',
     MATH: '#ff2d78',
+    ADD_MATH: '#00d4ff',
     SCIENCE: '#10b981',
+    BIOLOGY: '#84cc16',
+    PHYSICS: '#f59e0b',
+    CHEMISTRY: '#a78bfa',
     SEJARAH: '#f59e0b'
   };
 
